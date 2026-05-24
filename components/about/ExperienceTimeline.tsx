@@ -1,72 +1,141 @@
+"use client";
+
 import { About } from "@/lib/types";
 import { useTranslations } from "next-intl";
+import { Briefcase, ChevronRight, ChevronLeft } from "lucide-react";
+import ExportedImage from "next-image-export-optimizer";
+import { useState } from "react";
 
-export function ExperienceTimeline({ about, locale }: { about: About; locale: string }) {
-  const t = useTranslations("About");
-  const isRtl = locale === "ar";
-  
-  if (!about.experience || about.experience.length === 0) return null;
+interface ExperienceTimelineProps {
+  about: About;
+  locale: string;
+}
+
+function TimelineCarousel({ images }: { images: string[] }) {
+  const [activeImage, setActiveImage] = useState(0);
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-outline-variant shadow-sm bg-surface-variant/50 flex items-center justify-center">
+        <span className="text-outline">No image</span>
+      </div>
+    );
+  }
+
+  const nextImage = () => {
+    setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevImage = () => {
+    setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
 
   return (
-    <div className="w-full relative mt-16">
-      <div className="mb-12 text-center">
-        <h2 className="text-3xl font-bold font-sans text-foreground mb-4">{t("experience")}</h2>
-        <div className="h-1 w-16 bg-[#B5872A] rounded-full mx-auto"></div>
+    <div className="w-full flex flex-col gap-2">
+      {/* Main Image */}
+      <div className="relative w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-outline-variant shadow-sm sepia-[.3] hover:sepia-0 transition-all duration-500 group">
+        <ExportedImage
+          src={images[activeImage]}
+          alt="Experience image"
+          fill
+          className="object-cover transition-opacity duration-300"
+        />
+        
+        {images.length > 1 && (
+          <>
+            <button 
+              onClick={prevImage}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-surface/80 rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={nextImage}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-surface/80 rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </>
+        )}
       </div>
 
-      <div className="relative wrap overflow-hidden p-4 sm:p-10">
-        {/* Vertical line */}
-        <div 
-          className={`absolute border-opacity-20 border-[#B5872A] h-full border ${isRtl ? 'border-r-2 right-4 sm:right-1/2' : 'border-l-2 left-4 sm:left-1/2'}`}
-        ></div>
+      {/* Thumbnails */}
+      {images.length > 1 && (
+        <div className="flex gap-2 h-16">
+          {images.map((img, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveImage(index)}
+              className={`relative flex-1 rounded border overflow-hidden transition-all ${
+                activeImage === index
+                  ? "border-primary opacity-100"
+                  : "border-outline-variant opacity-60 hover:opacity-100"
+              }`}
+            >
+              <ExportedImage src={img} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
-        {about.experience.map((exp, idx) => {
-          const isLeft = idx % 2 === 0;
+export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
+  const t = useTranslations("About");
+  const isRtl = locale === "ar";
+  const experience = about.experience || [];
+
+  return (
+    <section className="flex flex-col gap-stack-lg">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <Briefcase className="w-5 h-5" />
+        </div>
+        <h2 className="font-arabic-headline text-2xl lg:text-3xl text-primary font-bold">
+          {t("experience")}
+        </h2>
+      </div>
+
+      <div className={`relative ${isRtl ? 'border-r-2 pr-10' : 'border-l-2 pl-10'} border-primary/20 space-y-16`}>
+        {experience.map((exp, index) => {
           const period = isRtl ? exp.period_ar : exp.period_en;
           const place = isRtl ? exp.place_ar : exp.place_en;
           const role = isRtl ? exp.role_ar : exp.role_en;
           const description = isRtl ? exp.description_ar : exp.description_en;
+          const images = exp.images || [];
 
           return (
-            <div key={idx} className={`mb-8 flex justify-between items-center w-full ${isLeft ? 'sm:flex-row-reverse' : ''}`}>
-              <div className="hidden sm:block sm:w-5/12"></div>
+            <div key={index} className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              {/* Timeline Bullet */}
+              <div 
+                className={`absolute top-1 w-4 h-4 rounded-full bg-surface border-2 border-primary shadow-sm ${isRtl ? '-right-[41px]' : '-left-[41px]'}`}
+              ></div>
               
-              <div className="z-20 w-8 h-8 flex items-center justify-center bg-[#B5872A] rounded-full shadow-md">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
+              {/* Info */}
+              <div>
+                <div className="mb-1">
+                  <span className="inline-block px-3 py-1 bg-surface-variant text-on-surface-variant rounded text-sm font-bold mb-2">
+                    {period}
+                  </span>
+                </div>
+                <h3 className="font-arabic-headline text-2xl text-primary font-bold mb-1">
+                  {place}
+                </h3>
+                <p className="text-on-surface-variant font-semibold text-lg mb-3">
+                  {role}
+                </p>
+                <p className="text-on-surface leading-relaxed whitespace-pre-wrap">
+                  {description}
+                </p>
               </div>
 
-              <div className={`w-full sm:w-5/12 ${isRtl ? 'pr-8 sm:pr-0' : 'pl-8 sm:pl-0'} ${isLeft ? (isRtl ? 'sm:pl-8' : 'sm:pr-8') : (isRtl ? 'sm:pr-8' : 'sm:pl-8')}`}>
-                <div className="bg-white rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.07)] p-6 hover:-translate-y-1 transition-transform border border-border">
-                  <div className="flex justify-between items-start mb-4 gap-4 flex-wrap">
-                    <div>
-                      <h3 className="font-bold text-xl text-foreground mb-1">{role}</h3>
-                      <h4 className="text-[#3D5A4C] font-bold">{place}</h4>
-                    </div>
-                    <span className="px-3 py-1 bg-[#B5872A]/10 text-[#B5872A] rounded-full text-sm font-bold whitespace-nowrap">
-                      {period}
-                    </span>
-                  </div>
-                  
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    {description}
-                  </p>
-                  
-                  {exp.image && (
-                    <a href={exp.image} target="_blank" rel="noopener noreferrer" className="block mt-4">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img 
-                        src={exp.image} 
-                        alt={place} 
-                        className="w-[120px] h-[80px] object-cover rounded-lg border border-border hover:opacity-80 transition-opacity cursor-pointer"
-                      />
-                    </a>
-                  )}
-                </div>
-              </div>
+              {/* Carousel */}
+              <TimelineCarousel images={images} />
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

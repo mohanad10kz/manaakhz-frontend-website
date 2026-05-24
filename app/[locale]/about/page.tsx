@@ -1,11 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
 import { getAbout } from "@/lib/strapi";
-import { ProfileCard } from "@/components/about/ProfileCard";
-import { InfoGrid } from "@/components/about/InfoGrid";
-import { SkillsTags } from "@/components/about/SkillsTags";
-import { MembershipsList } from "@/components/about/MembershipsList";
-import { ExperienceTimeline } from "@/components/about/ExperienceTimeline";
 import { getTranslations } from "next-intl/server";
+import { HeroBento } from "@/components/about/HeroBento";
+import { ExperienceTimeline } from "@/components/about/ExperienceTimeline";
+import { SkillsLanguagesGrid } from "@/components/about/SkillsLanguagesGrid";
 
 export default async function AboutPage({
   params,
@@ -26,57 +24,27 @@ export default async function AboutPage({
     );
   }
 
-  const isRtl = locale === "ar";
-  const bio = isRtl ? about.bio_ar : about.bio_en;
-
   return (
-    <div className="w-full bg-[#FAFAFA] min-h-screen pt-12 pb-24">
-      <div className="container max-w-[1100px] mx-auto px-6">
-        
-        {/* Main 40/60 Layout */}
-        <div className="flex flex-col lg:flex-row gap-12 items-start">
-          
-          {/* Left Column - Profile Card (40%) */}
-          <div className="w-full lg:w-[40%] sticky top-28">
-            <ProfileCard about={about} locale={locale} />
-          </div>
+    <main className="w-full grow bg-background relative" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Pattern Overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.15] pointer-events-none" 
+        style={{ 
+          backgroundImage: 'radial-gradient(#C8C7BF 1px, transparent 1px)',
+          backgroundSize: '24px 24px' 
+        }}
+      ></div>
 
-          {/* Right Column - Info, Skills, Memberships (60%) */}
-          <div className="w-full lg:w-[60%] flex flex-col gap-10">
-            
-            <section>
-              <h2 className="text-2xl font-bold font-sans text-foreground mb-4">{t("bio")}</h2>
-              <div className="h-1 w-12 bg-[#B5872A] rounded-full mb-6"></div>
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap text-lg">
-                {bio}
-              </p>
-            </section>
-            
-            <section>
-              <h2 className="text-2xl font-bold font-sans text-foreground mb-4">{t("personalInfo")}</h2>
-              <div className="h-1 w-12 bg-[#B5872A] rounded-full mb-6"></div>
-              <InfoGrid about={about} locale={locale} />
-            </section>
-            
-            <section>
-              <h2 className="text-2xl font-bold font-sans text-foreground mb-4">{t("skills")}</h2>
-              <div className="h-1 w-12 bg-[#B5872A] rounded-full mb-6"></div>
-              <SkillsTags about={about} locale={locale} />
-            </section>
-            
-            <section>
-              <h2 className="text-2xl font-bold font-sans text-foreground mb-4">{t("memberships")}</h2>
-              <div className="h-1 w-12 bg-[#B5872A] rounded-full mb-6"></div>
-              <MembershipsList about={about} locale={locale} />
-            </section>
+      <div className="container mx-auto px-gutter py-section-padding max-w-max-width relative flex flex-col gap-section-padding">
+        {/* Hero Bento Grid */}
+        <HeroBento about={about} locale={locale} />
 
-          </div>
-        </div>
-
-        {/* Full width Experience Timeline */}
+        {/* Professional Timeline */}
         <ExperienceTimeline about={about} locale={locale} />
 
+        {/* Skills & Languages Grid */}
+        <SkillsLanguagesGrid about={about} locale={locale} />
       </div>
-    </div>
+    </main>
   );
 }

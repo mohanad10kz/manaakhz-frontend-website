@@ -21,6 +21,10 @@ export const mockAbout: About = {
   memberships_en: ["Engineering Syndicate", "Engineers Society"],
   skills_ar: ["تصميم دوائر إلكترونية", "برمجة مضمّنة", "Altium Designer", "KiCad"],
   skills_en: ["Electronic Circuit Design", "Embedded Programming", "Altium Designer", "KiCad"],
+  languages: [
+    { name_ar: "العربية", name_en: "Arabic", level_ar: "اللغة الأم", level_en: "Native", percentage: 100 },
+    { name_ar: "الإنجليزية", name_en: "English", level_ar: "جيد", level_en: "Good", percentage: 65 }
+  ],
   experience: [
     {
       period_ar: "2015–الآن",
@@ -31,7 +35,7 @@ export const mockAbout: About = {
       role_en: "Maintenance Engineer",
       description_ar: "صيانة أجهزة التصوير الطبي المتقدمة",
       description_en: "Maintenance of advanced medical imaging equipment",
-      image: "https://placehold.co/300x200/B5872A/white?text=Taibah"
+      images: ["https://placehold.co/300x200/B5872A/white?text=Taibah"]
     },
     {
       period_ar: "2012–2014",
@@ -42,7 +46,7 @@ export const mockAbout: About = {
       role_en: "Installation & Maintenance Engineer",
       description_ar: "تركيب وصيانة أنظمة التحكم",
       description_en: "Installation and maintenance of control systems",
-      image: "https://placehold.co/300x200/B5872A/white?text=AEMC"
+      images: ["https://placehold.co/300x200/B5872A/white?text=AEMC"]
     }
   ],
   social_links: [

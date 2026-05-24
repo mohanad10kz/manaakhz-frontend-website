@@ -13,7 +13,15 @@ export interface WorkExperience {
   role_en: string
   description_ar: string
   description_en: string
-  image: string | null
+  images: string[]
+}
+
+export interface Language {
+  name_ar: string
+  name_en: string
+  level_ar: string
+  level_en: string
+  percentage: number
 }
 
 export interface About {
@@ -37,6 +45,7 @@ export interface About {
   memberships_en: string[]
   skills_ar: string[]
   skills_en: string[]
+  languages: Language[]
   experience: WorkExperience[]
   photo: string
   social_links: SocialLink[]

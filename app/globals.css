@@ -30,6 +30,100 @@
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
+
+  /* Material 3 Colors from about.md */
+  --color-inverse-surface: #313030;
+  --color-surface-bright: #fdf8f7;
+  --color-on-error: #ffffff;
+  --color-surface-container: #f1edec;
+  --color-on-tertiary-fixed: #1d1b1c;
+  --color-primary-fixed-dim: #c9c6c3;
+  --color-on-secondary-fixed-variant: #304d3f;
+  --color-inverse-primary: #c9c6c3;
+  --color-surface-tint: #5f5e5c;
+  --color-on-surface: #1c1b1b;
+  --color-surface-container-highest: #e5e2e1;
+  --color-secondary-fixed-dim: #aecebc;
+  --color-on-surface-variant: #474741;
+  --color-secondary-container: #c9ead8;
+  --color-on-secondary: #ffffff;
+  --color-on-primary: #ffffff;
+  --color-secondary-fixed: #c9ead8;
+  --color-primary-container: #1c1c1a;
+  --color-on-primary-fixed-variant: #474744;
+  --color-on-primary-fixed: #1c1c1a;
+  --color-tertiary-fixed-dim: #cbc5c6;
+  --color-tertiary: #000000;
+  --color-on-tertiary: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-tertiary-container: #1d1b1c;
+  --color-surface-dim: #ddd9d8;
+  --color-tertiary-fixed: #e7e1e2;
+  --color-surface-container-high: #ebe7e6;
+  --color-error: #ba1a1a;
+  --color-on-tertiary-fixed-variant: #494647;
+  --color-inverse-on-surface: #f4f0ef;
+  --color-surface-container-low: #f7f3f2;
+  --color-on-background: #1c1b1b;
+  --color-primary-fixed: #e5e2de;
+  --color-on-secondary-container: #4d6b5c;
+  --color-on-primary-container: #858481;
+  --color-on-error-container: #93000a;
+  --color-on-tertiary-container: #878384;
+  --color-surface-variant: #e5e2e1;
+  --color-outline-variant: #c8c7bf;
+  --color-outline: #777771;
+  --color-on-secondary-fixed: #032015;
+  --color-error-container: #ffdad6;
+  --color-surface: #fdf8f7;
+
+  /* Spacing */
+  --spacing-stack-md: 16px;
+  --spacing-max-width: 1100px;
+  --spacing-section-padding: 80px;
+  --spacing-stack-sm: 8px;
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 16px;
+  --spacing-stack-lg: 32px;
+
+  /* Fonts */
+  --font-arabic-headline: Cairo, sans-serif;
+  --font-arabic-body: Cairo, sans-serif;
+
+  /* Font Sizes */
+  --text-headline-md: 32px;
+  --text-headline-md--line-height: 1.3;
+  --text-headline-md--font-weight: 600;
+
+  --text-display-lg-mobile: 32px;
+  --text-display-lg-mobile--line-height: 1.2;
+  --text-display-lg-mobile--font-weight: 700;
+
+  --text-arabic-headline: 30px;
+  --text-arabic-headline--line-height: 1.5;
+  --text-arabic-headline--font-weight: 700;
+
+  --text-arabic-body: 18px;
+  --text-arabic-body--line-height: 1.8;
+  --text-arabic-body--font-weight: 400;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.7;
+  --text-body-lg--font-weight: 400;
+
+  --text-headline-md-mobile: 24px;
+  --text-headline-md-mobile--line-height: 1.3;
+  --text-headline-md-mobile--font-weight: 600;
+
+  --text-label-sm: 14px;
+  --text-label-sm--line-height: 1.4;
+  --text-label-sm--font-weight: 600;
+  --text-label-sm--letter-spacing: 0.05em;
+
+  --text-display-lg: 48px;
+  --text-display-lg--line-height: 1.2;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg--letter-spacing: -0.02em;
 }
 
 :root {

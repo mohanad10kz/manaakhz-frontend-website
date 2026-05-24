@@ -10,8 +10,13 @@ async function fetchStrapi(path: string, params: Record<string, any> = {}) {
   try {
     const url = new URL(`${STRAPI_URL}/api${path}`);
     
-    // Default to populate all media/relations
-    url.searchParams.append("populate", "*");
+    // Check if params already contains a populate key
+    const hasCustomPopulate = Object.keys(params).some(key => key.startsWith('populate'));
+    
+    // Default to populate all media/relations if no custom populate is provided
+    if (!hasCustomPopulate) {
+      url.searchParams.append("populate", "*");
+    }
     
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined && value !== null) {
@@ -53,7 +58,9 @@ function extractMediaUrls(media: any): string[] {
   const items = Array.isArray(media) ? media : [media];
   return items.map((item: any) => {
     if (!item?.url) return "";
-    return item.url.startsWith("http") ? item.url : `${STRAPI_URL}${item.url}`;
+    // If it's an external URL (e.g. cloudinary, AWS), return as is.
+    // Otherwise, assume it's a local Strapi upload and it has been downloaded to /uploads/...
+    return item.url.startsWith("http") ? item.url : item.url;
   }).filter(Boolean);
 }
 
@@ -62,7 +69,11 @@ function extractMediaUrls(media: any): string[] {
 // ----------------------------------------------------------------------
 
 export async function getAbout(locale?: string): Promise<About | null> {
-  const json = await fetchStrapi("/about");
+  const json = await fetchStrapi("/about", {
+    "populate[photo]": "true",
+    "populate[experience][populate][images]": "true",
+    "populate[languages]": "true"
+  });
   if (!json?.data) return null;
 
   const data = json.data;
@@ -91,6 +102,13 @@ export async function getAbout(locale?: string): Promise<About | null> {
     memberships_en: data.memberships_en || [],
     skills_ar: data.skills_ar || [],
     skills_en: data.skills_en || [],
+    languages: (data.languages || []).map((lang: any) => ({
+      name_ar: lang.name_ar || "",
+      name_en: lang.name_en || "",
+      level_ar: lang.level_ar || "",
+      level_en: lang.level_en || "",
+      percentage: lang.percentage || 0,
+    })),
     experience: (data.experience || []).map((exp: any) => ({
       period_ar: exp.period_ar || "",
       period_en: exp.period_en || "",
@@ -100,7 +118,7 @@ export async function getAbout(locale?: string): Promise<About | null> {
       role_en: exp.role_en || "",
       description_ar: exp.description_ar || "",
       description_en: exp.description_en || "",
-      image: extractMediaUrls(exp.image)[0] || null,
+      images: extractMediaUrls(exp.images),
     })),
     social_links: socialLinks,
     photo: extractMediaUrls(data.photo)[0] || "",

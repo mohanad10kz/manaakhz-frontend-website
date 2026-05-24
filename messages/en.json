@@ -15,8 +15,9 @@
     "nationality": "Nationality",
     "education": "Education",
     "maritalStatus": "Marital Status",
-    "skills": "Skills",
-    "memberships": "Memberships & Positions",
+    "skills": "Technical Skills",
+    "languages": "Languages",
+    "memberships": "Practical Qualifications",
     "experience": "Work Experience",
     "present": "Present"
   },

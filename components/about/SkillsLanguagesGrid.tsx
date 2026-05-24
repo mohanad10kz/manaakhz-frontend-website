@@ -1,0 +1,67 @@
+import { About } from "@/lib/types";
+import { useTranslations } from "next-intl";
+import { Cpu, Languages } from "lucide-react";
+
+interface SkillsLanguagesGridProps {
+  about: About;
+  locale: string;
+}
+
+export function SkillsLanguagesGrid({ about, locale }: SkillsLanguagesGridProps) {
+  const t = useTranslations("About");
+  const isRtl = locale === "ar";
+  
+  const skills = isRtl ? about.skills_ar : about.skills_en;
+  const languages = about.languages || [];
+
+  return (
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+      {/* Skills */}
+      <div className="bg-surface border border-outline-variant rounded-xl p-6 md:p-8 shadow-sm">
+        <h2 className="font-arabic-headline text-xl text-primary mb-6 flex items-center gap-2 border-b border-outline-variant pb-3">
+          <Cpu className="text-primary w-6 h-6" />
+          {t("skills")}
+        </h2>
+        <ul className="space-y-4">
+          {skills?.map((skill, index) => (
+            <li key={index} className="flex items-start gap-3">
+              <div className="mt-2 w-2 h-2 rounded-sm bg-primary shrink-0 transform rotate-45"></div>
+              <span className="text-on-surface text-lg leading-relaxed">{skill}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Languages */}
+      <div className="bg-surface border border-outline-variant rounded-xl p-6 md:p-8 shadow-sm">
+        <h2 className="font-arabic-headline text-xl text-primary mb-6 flex items-center gap-2 border-b border-outline-variant pb-3">
+          <Languages className="text-primary w-6 h-6" />
+          {t("languages")}
+        </h2>
+        <div className="space-y-6">
+          {languages.map((lang, index) => {
+            const name = isRtl ? lang.name_ar : lang.name_en;
+            const level = isRtl ? lang.level_ar : lang.level_en;
+            
+            return (
+              <div key={index}>
+                <div className="flex justify-between mb-2">
+                  <span className="font-semibold text-on-surface text-lg">{name}</span>
+                  <span className={lang.percentage === 100 ? "text-primary text-sm font-medium" : "text-outline text-sm font-medium"}>
+                    {level}
+                  </span>
+                </div>
+                <div className="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-1000 ${lang.percentage === 100 ? 'bg-primary' : 'bg-secondary opacity-80'}`} 
+                    style={{ width: `${lang.percentage}%` }}
+                  ></div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

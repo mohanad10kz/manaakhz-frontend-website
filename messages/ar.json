@@ -15,8 +15,9 @@
     "nationality": "الجنسية",
     "education": "المؤهل العلمي",
     "maritalStatus": "الوضع الاجتماعي",
-    "skills": "المهارات",
-    "memberships": "العضويات والمناصب",
+    "skills": "المهارات الفنية",
+    "languages": "اللغات",
+    "memberships": "المؤهلات العملية",
     "experience": "المسيرة المهنية",
     "present": "حتى الآن"
   },
