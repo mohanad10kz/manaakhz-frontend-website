@@ -8,11 +8,17 @@
     "view_all": "View All"
   },
   "About": {
-    "title": "About Me",
-    "skills": "Skills",
+    "pageTitle": "Biography",
+    "bio": "About Me",
+    "personalInfo": "Personal Information",
+    "birthDate": "Date of Birth",
     "nationality": "Nationality",
-    "birth_date": "Birth Date",
-    "connect": "Connect with me"
+    "education": "Education",
+    "maritalStatus": "Marital Status",
+    "skills": "Skills",
+    "memberships": "Memberships & Positions",
+    "experience": "Work Experience",
+    "present": "Present"
   },
   "Design": {
     "title": "Designs",

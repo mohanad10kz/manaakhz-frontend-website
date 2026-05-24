@@ -1,17 +1,54 @@
 import { About, ContactInfo, Design, Post } from "./types";
 
 export const mockAbout: About = {
-  name: "مناع للإلكترونيات",
-  title: "مهندس إلكترونيات ومصمم دوائر",
+  name_ar: "مناع للإلكترونيات",
+  name_en: "Manaa Electronics",
+  title_ar: "مهندس إلكترونيات ومصمم دوائر",
+  title_en: "Electronics Engineer & Circuit Designer",
   bio_ar: "مهتم بتصميم الدوائر الإلكترونية والكتابة التقنية منذ سنوات...",
   bio_en: "Electronics engineer passionate about circuit design and technical writing...",
   birth_date: "1975-01-01",
-  nationality: "ليبي",
-  skills: ["تصميم دوائر إلكترونية", "برمجة مضمّنة", "Altium Designer", "KiCad"],
+  birth_place_ar: "طرابلس",
+  birth_place_en: "Tripoli",
+  nationality_ar: "ليبي",
+  nationality_en: "Libyan",
+  marital_status_ar: "متزوج",
+  marital_status_en: "Married",
+  phone: "+218 91 000 0000",
+  education_ar: "بكالوريوس هندسة إلكترونية",
+  education_en: "BSc in Electronic Engineering",
+  memberships_ar: ["نقابة المهن الهندسية", "جمعية المهندسين"],
+  memberships_en: ["Engineering Syndicate", "Engineers Society"],
+  skills_ar: ["تصميم دوائر إلكترونية", "برمجة مضمّنة", "Altium Designer", "KiCad"],
+  skills_en: ["Electronic Circuit Design", "Embedded Programming", "Altium Designer", "KiCad"],
+  experience: [
+    {
+      period_ar: "2015–الآن",
+      period_en: "2015–Present",
+      place_ar: "مركز طيبة للتصوير الطبي",
+      place_en: "Taibah Medical Imaging Center",
+      role_ar: "مهندس صيانة",
+      role_en: "Maintenance Engineer",
+      description_ar: "صيانة أجهزة التصوير الطبي المتقدمة",
+      description_en: "Maintenance of advanced medical imaging equipment",
+      image: "https://placehold.co/300x200/B5872A/white?text=Taibah"
+    },
+    {
+      period_ar: "2012–2014",
+      period_en: "2012–2014",
+      place_ar: "شركة التقنية الجديدة",
+      place_en: "New Tech Company",
+      role_ar: "مهندس صيانة وتركيب",
+      role_en: "Installation & Maintenance Engineer",
+      description_ar: "تركيب وصيانة أنظمة التحكم",
+      description_en: "Installation and maintenance of control systems",
+      image: "https://placehold.co/300x200/B5872A/white?text=AEMC"
+    }
+  ],
   social_links: [
     { platform: "linkedin", url: "https://linkedin.com/in/manaaelectronics", label: "LinkedIn" }
   ],
-  photo: "https://placehold.co/800x600?text=Avatar"
+  photo: "https://placehold.co/400x500/3D5A4C/white?text=Profile"
 };
 
 export const mockDesigns: Design[] = [

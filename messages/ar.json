@@ -8,11 +8,17 @@
     "view_all": "عرض الكل"
   },
   "About": {
-    "title": "عني",
-    "skills": "المهارات",
+    "pageTitle": "السيرة الشخصية",
+    "bio": "نبذة عني",
+    "personalInfo": "المعلومات الشخصية",
+    "birthDate": "تاريخ الميلاد",
     "nationality": "الجنسية",
-    "birth_date": "تاريخ الميلاد",
-    "connect": "تواصل معي"
+    "education": "المؤهل العلمي",
+    "maritalStatus": "الوضع الاجتماعي",
+    "skills": "المهارات",
+    "memberships": "العضويات والمناصب",
+    "experience": "المسيرة المهنية",
+    "present": "حتى الآن"
   },
   "Design": {
     "title": "التصاميم",
