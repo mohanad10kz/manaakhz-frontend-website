@@ -5,54 +5,15 @@
 
 ## 🔴 المرحلة 1 — الإعداد والبيانات الوهمية
 
-- [ ] **1.1** إنشاء مشروع Next.js + إعداد التبعيات
-  ```bash
-  npx create-next-app@latest frontend --typescript --tailwind --app
-  npm install next-intl lucide-react react-markdown yet-another-react-lightbox
-  npx shadcn@latest init
-  npx shadcn@latest add card button badge separator sheet navigation-menu
-  ```
-
-- [ ] **1.2** إعداد `next.config.ts` للـ Static Export + i18n routing
-  - ملف: `frontend/next.config.ts`
-  - ملف: `frontend/src/i18n/routing.ts`
-  - ملف: `frontend/src/i18n/request.ts`
-
-- [ ] **1.3** إنشاء ملفات الترجمة
-  - ملف: `messages/ar.json`
-  - ملف: `messages/en.json`
-
-- [ ] **1.4** إنشاء `mock-data.ts` + `types.ts`
-  - ملف: `frontend/src/lib/types.ts`
-  - ملف: `frontend/src/lib/mock-data.ts`
-  - ارجع لـ `_ai/MOCK_DATA.md` لشكل البيانات
-
-- [ ] **1.5** بناء Layout المشترك (Header + Footer + Navbar + LanguageSwitcher)
-  - المكونات في: `frontend/src/components/layout/`
-  - ملف التوثيق: `docs/layout.md` ← أنشئه بعد الانتهاء
 
 ---
 
 ## 🟡 المرحلة 2 — الصفحات (بيانات وهمية)
 
-- [ ] **2.1** الصفحة الرئيسية `app/[locale]/page.tsx`
-  - مكونات: `HeroSection.tsx` + `SectionsPreview.tsx`
-  - توثيق: `docs/home.md`
 
-- [ ] **2.2** صفحة السيرة `app/[locale]/about/page.tsx`
-  - مكونات: `BiographyCard.tsx`
-  - توثيق: `docs/about.md`
 
-- [ ] **2.3** صفحة التصاميم `app/[locale]/design/page.tsx` + `[slug]/page.tsx`
-  - مكونات: `DesignGrid.tsx` + `DesignCard.tsx`
-  - توثيق: `docs/design.md`
 
-- [ ] **2.4** صفحة المدونة `app/[locale]/blog/page.tsx` + `[slug]/page.tsx`
-  - مكونات: `PostList.tsx` + `PostCard.tsx`
-  - توثيق: `docs/blog.md`
 
-- [ ] **2.5** صفحة التواصل `app/[locale]/contact/page.tsx`
-  - توثيق: `docs/contact.md`
 
 ---
 
@@ -88,3 +49,13 @@
 ## ✅ منجز
 <!-- أنقل المهام هنا بعد إنجازها مع تاريخ الإنجاز -->
 <!-- مثال: - [x] 1.1 إنشاء مشروع Next.js — ✅ 2026-05-24 -->
+- [x] **1.1** تهيئة هيكل المشروع (Git, Folders, .gitignore, README) — ✅ 2026-05-24
+- [x] **1.2** إعداد `next.config.ts` للـ Static Export + i18n routing — ✅ 2026-05-24
+- [x] **1.3** إنشاء ملفات الترجمة (ar.json / en.json) — ✅ 2026-05-24
+- [x] **1.4** إنشاء `mock-data.ts` + `types.ts` — ✅ 2026-05-24
+- [x] **1.5** بناء Layout المشترك (Header + Footer + Navbar + LanguageSwitcher) — ✅ 2026-05-24
+- [x] **2.1** الصفحة الرئيسية (`HeroSection`, `SectionsPreview`) — ✅ 2026-05-24
+- [x] **2.2** صفحة السيرة (`BiographyCard`) — ✅ 2026-05-24
+- [x] **2.3** صفحة التصاميم (`DesignGrid`, `DesignCard`) — ✅ 2026-05-24
+- [x] **2.4** صفحة المدونة (`PostList`, `PostCard`) — ✅ 2026-05-24
+- [x] **2.5** صفحة التواصل — ✅ 2026-05-24

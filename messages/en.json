@@ -1,0 +1,58 @@
+{
+  "Index": {
+    "hero_title": "Hi, I'm Manaa Electronics",
+    "hero_subtitle": "Electronics Engineer & Custom Circuit Designer",
+    "hero_cta": "Explore My Work",
+    "latest_designs": "Latest Designs",
+    "latest_posts": "Latest Posts",
+    "view_all": "View All"
+  },
+  "About": {
+    "title": "About Me",
+    "skills": "Skills",
+    "nationality": "Nationality",
+    "birth_date": "Birth Date",
+    "connect": "Connect with me"
+  },
+  "Design": {
+    "title": "Designs",
+    "description": "A collection of electronic circuit designs and PCBs I have developed.",
+    "view_details": "View Details",
+    "back": "Back to Designs",
+    "category": "Category",
+    "date": "Date"
+  },
+  "Blog": {
+    "title": "Blog",
+    "description": "Articles and thoughts on electronics, design, and technology.",
+    "read_more": "Read More",
+    "back": "Back to Blog",
+    "tags": "Tags",
+    "date": "Date"
+  },
+  "Contact": {
+    "title": "Contact Me",
+    "description": "I'm always open to discussing new projects or collaboration opportunities.",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location"
+  },
+  "Layout": {
+    "nav": {
+      "home": "Home",
+      "about": "Resume",
+      "design": "My Designs",
+      "blog": "Thoughts & Notes",
+      "contact": "Contact Me"
+    },
+    "footer": {
+      "rights": "All rights reserved."
+    }
+  },
+  "Home": {
+    "hero": {
+      "cta_primary": "My Designs",
+      "cta_secondary": "My Thoughts & Blog"
+    }
+  }
+}
