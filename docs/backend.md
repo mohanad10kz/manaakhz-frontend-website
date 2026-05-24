@@ -9,7 +9,31 @@ Navigate to the `backend` directory and run the following command to start the S
 cd backend
 npm run develop
 ```
-The server will start on `http://localhost:1337`.
+The server will start  - `NEXT_PUBLIC_STRAPI_URL=http://localhost:1337`
+
+## Seed البيانات
+
+### المتطلبات قبل التشغيل
+1. Strapi يعمل على `http://localhost:1337`
+2. أنشئ API Token في Strapi Admin:
+   Settings → API Tokens → Create new token
+   - Name: seed-script
+   - Type: Full Access
+   - نسخ التوكن
+
+3. أضفه في `backend/.env`:
+   STRAPI_SEED_TOKEN=paste_token_here
+
+### تشغيل الـ Seed
+```bash
+node backend/scripts/seed-about.mjs
+```
+
+### بعد التشغيل
+- تحقق من البيانات في: http://localhost:1337/admin
+- ارفع الصور يدوياً في:
+  - About → photo
+  - كل Work Experience (Component) → image.
 The Strapi Admin UI is available at `http://localhost:1337/admin`.
 
 ## Content Types Created

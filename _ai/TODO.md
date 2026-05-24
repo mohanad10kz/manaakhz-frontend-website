@@ -25,7 +25,7 @@
   ```
   Content Types: About, Design, Post, ContactInfo, SocialLink
 
-- [ ] **3.2** إدخال البيانات الحقيقية في Strapi (نقل من mock)
+- [x] **3.2** رفع بيانات About الحقيقية عبر Seed Script — ✅ 2026-05-24 (نقل من mock)
 
 - [x] **3.3** إنشاء `strapi.ts` + إعداد API Token — ✅ 2026-05-24
   - ملف: `frontend/lib/strapi.ts`
