@@ -1,31 +1,35 @@
 # About Page Documentation
 
-The About page provides detailed information about the engineer, including their biography, skills, work experience timeline, and contact links.
+The About page provides detailed information about the engineer, featuring a modern Bento Grid design, a chronological experience timeline, and dynamic SSG image optimization.
 
 ## Components Used
 
-### `ProfileCard`
-- **Purpose**: Displays the profile photo, name, title, and social links.
-- **Features**: Circular image with a gold border, automatically localized name and title.
+### `HeroBento`
+- **Purpose**: A visually striking hero section combining the profile photo, name, title, bio, and social links.
+- **Features**: Uses a Bento Grid layout (CSS Grid). Responsive design that collapses to a single column on mobile and expands to multiple columns on desktop. It uses `<ExportedImage>` for static image optimization.
 
-### `InfoGrid`
-- **Purpose**: Displays basic personal information.
-- **Features**: 2x2 grid (desktop) displaying Birth Date, Nationality, Education, and Marital Status with Lucide icons.
-
-### `SkillsTags`
-- **Purpose**: Displays technical skills.
-- **Features**: Alternating gold and green colors for each skill pill.
-
-### `MembershipsList`
-- **Purpose**: Lists professional memberships.
-- **Features**: Subtle green background with gold checkmarks.
+### `InfoBento`
+- **Purpose**: Displays detailed personal and professional information in grouped Bento boxes.
+- **Features**: 
+  - **Personal Details**: Birth date, nationality, marital status, and location.
+  - **Skills & Languages**: Technical skills displayed as badges and languages displayed with percentage progress bars.
+  - **Education & Memberships**: Academic background and professional affiliations.
 
 ### `ExperienceTimeline`
 - **Purpose**: Displays work experience in a chronological timeline.
-- **Features**: Vertical line layout with alternating sides (on desktop). Includes role, place, period, description, and thumbnail image.
+- **Features**: 
+  - Vertical timeline layout with interactive design.
+  - Includes role, place, period, and description.
+  - **Image Carousel**: If an experience entry has multiple images, they are displayed in an interactive carousel with thumbnail navigation and next/prev controls, using `<ExportedImage>`.
 
 ## Data Source
-- Uses `getAbout(locale)` from `lib/strapi.ts`, utilizing the robust `WorkExperience` data type.
+- Uses `getAbout(locale)` from `lib/strapi.ts`.
+- Deeply populates components: `?populate[photo]=true&populate[experience][populate][images]=true&populate[languages]=true`.
+- Supports full localization (Arabic/English).
+
+## SSG Image Optimization
+- Images from Strapi are downloaded during the `prebuild` phase using `scripts/fetch-images.mjs`.
+- All images are rendered using `next-image-export-optimizer` (`<ExportedImage>`) to ensure they are optimized and available in the `out/` folder for static hosting without requiring an active Next.js server.
 
 ## Routing
 - Located at `app/[locale]/about/page.tsx`.

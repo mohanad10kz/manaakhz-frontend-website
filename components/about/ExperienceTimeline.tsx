@@ -16,8 +16,8 @@ function TimelineCarousel({ images }: { images: string[] }) {
 
   if (!images || images.length === 0) {
     return (
-      <div className="w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-outline-variant shadow-sm bg-surface-variant/50 flex items-center justify-center">
-        <span className="text-outline">No image</span>
+      <div className="w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-border shadow-sm bg-muted/50 flex items-center justify-center">
+        <span className="text-muted-foreground">No image</span>
       </div>
     );
   }
@@ -33,7 +33,7 @@ function TimelineCarousel({ images }: { images: string[] }) {
   return (
     <div className="w-full flex flex-col gap-2">
       {/* Main Image */}
-      <div className="relative w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-outline-variant shadow-sm sepia-[.3] hover:sepia-0 transition-all duration-500 group">
+      <div className="relative w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-border shadow-sm sepia-[.3] hover:sepia-0 transition-all duration-500 group">
         <ExportedImage
           src={images[activeImage]}
           alt="Experience image"
@@ -45,13 +45,13 @@ function TimelineCarousel({ images }: { images: string[] }) {
           <>
             <button 
               onClick={prevImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-surface/80 rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-card/80 rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
             <button 
               onClick={nextImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-surface/80 rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-card/80 rounded-full flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -69,7 +69,7 @@ function TimelineCarousel({ images }: { images: string[] }) {
               className={`relative flex-1 rounded border overflow-hidden transition-all ${
                 activeImage === index
                   ? "border-primary opacity-100"
-                  : "border-outline-variant opacity-60 hover:opacity-100"
+                  : "border-border opacity-60 hover:opacity-100"
               }`}
             >
               <ExportedImage src={img} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
@@ -109,23 +109,23 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
             <div key={index} className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
               {/* Timeline Bullet */}
               <div 
-                className={`absolute top-1 w-4 h-4 rounded-full bg-surface border-2 border-primary shadow-sm ${isRtl ? '-right-[41px]' : '-left-[41px]'}`}
+                className={`absolute top-1 w-4 h-4 rounded-full bg-card border-2 border-primary shadow-sm ${isRtl ? '-right-[41px]' : '-left-[41px]'}`}
               ></div>
               
               {/* Info */}
               <div>
                 <div className="mb-1">
-                  <span className="inline-block px-3 py-1 bg-surface-variant text-on-surface-variant rounded text-sm font-bold mb-2">
+                  <span className="inline-block px-3 py-1 bg-muted text-muted-foreground rounded text-sm font-bold mb-2">
                     {period}
                   </span>
                 </div>
                 <h3 className="font-arabic-headline text-2xl text-primary font-bold mb-1">
                   {place}
                 </h3>
-                <p className="text-on-surface-variant font-semibold text-lg mb-3">
+                <p className="text-muted-foreground font-semibold text-lg mb-3">
                   {role}
                 </p>
-                <p className="text-on-surface leading-relaxed whitespace-pre-wrap">
+                <p className="text-foreground leading-relaxed whitespace-pre-wrap">
                   {description}
                 </p>
               </div>
