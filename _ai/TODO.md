@@ -19,7 +19,7 @@
 
 ## 🟢 المرحلة 3 — ربط الباك إند (Strapi)
 
-- [ ] **3.1** إنشاء مشروع Strapi 5 + Content Types
+- [x] **3.1** إنشاء مشروع Strapi 5 + Content Types — ✅ 2026-05-24
   ```bash
   npx create-strapi-app@latest backend --quickstart
   ```
