@@ -1,7 +1,7 @@
 import { Cairo, Playfair_Display, Source_Serif_4 } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { routing } from "@/src/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/layout/Header";

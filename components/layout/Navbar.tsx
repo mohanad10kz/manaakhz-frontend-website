@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Link, usePathname } from "@/src/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +25,9 @@ export function Navbar() {
           href={link.href}
           className={cn(
             "transition-colors hover:text-primary text-[15px]",
-            pathname === link.href ? "text-primary font-bold" : "text-foreground/80"
+            pathname === link.href
+              ? "text-primary font-bold"
+              : "text-foreground/80",
           )}
         >
           {link.label}

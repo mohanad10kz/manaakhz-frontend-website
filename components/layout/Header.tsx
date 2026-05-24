@@ -2,7 +2,7 @@ import { Navbar } from "./Navbar";
 import { MobileNav } from "./MobileNav";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
-import { Link } from "@/src/i18n/routing";
+import { Link } from "@/i18n/routing";
 
 export function Header() {
   return (
@@ -10,11 +10,14 @@ export function Header() {
       <div className="container max-w-[1100px] mx-auto flex h-20 items-center justify-between px-6">
         {/* Right side: Logo (in RTL context, first item is Right) */}
         <div className="flex-1 flex justify-start">
-          <Link href="/" className="font-bold text-3xl tracking-tight text-primary font-sans">
+          <Link
+            href="/"
+            className="font-bold text-3xl tracking-tight text-primary font-sans"
+          >
             مناع للإلكترونيات
           </Link>
         </div>
-        
+
         {/* Center: Navigation */}
         <div className="hidden md:flex flex-none justify-center">
           <Navbar />

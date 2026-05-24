@@ -1,7 +1,7 @@
 "use client";
 
 import { Cpu, BookOpen, User } from "lucide-react";
-import { Link } from "@/src/i18n/routing";
+import { Link } from "@/i18n/routing";
 
 export function SectionsPreview() {
   const sections = [
@@ -22,7 +22,7 @@ export function SectionsPreview() {
       description: "تعرّف عليّ أكثر",
       href: "/about",
       icon: User,
-    }
+    },
   ];
 
   return (
@@ -32,16 +32,20 @@ export function SectionsPreview() {
           {sections.map((section) => {
             const Icon = section.icon;
             return (
-              <div 
+              <div
                 key={section.href}
                 className="bg-white rounded-lg p-8 flex flex-col items-start shadow-[0_2px_12px_rgba(0,0,0,0.07)] transition-transform hover:-translate-y-1"
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-6">
                   <Icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="font-bold text-xl text-foreground mb-3">{section.title}</h3>
-                <p className="text-[#6B6B67] mb-6 line-clamp-2 h-14">{section.description}</p>
-                <Link 
+                <h3 className="font-bold text-xl text-foreground mb-3">
+                  {section.title}
+                </h3>
+                <p className="text-[#6B6B67] mb-6 line-clamp-2 h-14">
+                  {section.description}
+                </p>
+                <Link
                   href={section.href}
                   className="mt-auto text-primary font-bold hover:underline inline-flex items-center gap-2"
                 >

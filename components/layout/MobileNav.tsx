@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Link, usePathname } from "@/src/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
@@ -10,7 +10,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetTitle
+  SheetTitle,
 } from "@/components/ui/sheet";
 
 export function MobileNav() {
@@ -29,12 +29,19 @@ export function MobileNav() {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-primary hover:bg-primary/10">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-primary hover:bg-primary/10"
+        >
           <Menu className="h-6 w-6" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px] bg-background">
+      <SheetContent
+        side="left"
+        className="w-[300px] sm:w-[400px] bg-background"
+      >
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
         <nav className="flex flex-col gap-6 mt-12">
           {links.map((link) => (
@@ -44,7 +51,9 @@ export function MobileNav() {
               onClick={() => setIsOpen(false)}
               className={cn(
                 "text-lg font-medium transition-colors hover:text-primary border-b border-border/50 pb-4",
-                pathname === link.href ? "text-primary font-bold" : "text-foreground/80"
+                pathname === link.href
+                  ? "text-primary font-bold"
+                  : "text-foreground/80",
               )}
             >
               {link.label}

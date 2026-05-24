@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { getPostBySlug, mockPosts } from "@/lib/mock-data";
-import { Link } from "@/src/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
 
 export function generateStaticParams() {
@@ -34,18 +34,25 @@ export default async function BlogPostPage({
   return (
     <div className="flex-grow pt-16 pb-20">
       <div className="max-w-[1100px] mx-auto px-6">
-        
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-muted-foreground text-sm mb-8">
-          <Link href="/" className="hover:text-primary transition-colors">الرئيسية</Link>
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-2 text-muted-foreground text-sm mb-8"
+        >
+          <Link href="/" className="hover:text-primary transition-colors">
+            الرئيسية
+          </Link>
           <ChevronRight className="w-4 h-4" />
-          <Link href="/blog" className="hover:text-primary transition-colors">أفكاري ومذكراتي</Link>
+          <Link href="/blog" className="hover:text-primary transition-colors">
+            أفكاري ومذكراتي
+          </Link>
           <ChevronRight className="w-4 h-4" />
-          <span aria-current="page" className="text-foreground font-medium">{title}</span>
+          <span aria-current="page" className="text-foreground font-medium">
+            {title}
+          </span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
           {/* Right Column (Text Content) */}
           <div className="lg:col-span-7">
             {/* Post Header */}
@@ -54,7 +61,7 @@ export default async function BlogPostPage({
                 {title}
                 <span className="absolute -bottom-2 right-0 w-full h-[3px] bg-primary rounded-full opacity-80"></span>
               </h1>
-              
+
               {/* Meta */}
               <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm mt-6">
                 <span className="flex items-center gap-1.5">
@@ -64,8 +71,11 @@ export default async function BlogPostPage({
                 <span className="w-1 h-1 rounded-full bg-muted-foreground opacity-50"></span>
                 <span className="flex flex-wrap items-center gap-2">
                   <Tag className="w-4 h-4" />
-                  {post.tags.split(',').map((tag) => (
-                    <span key={tag.trim()} className="px-2 py-0.5 bg-secondary/10 text-secondary rounded text-xs font-medium">
+                  {post.tags.split(",").map((tag) => (
+                    <span
+                      key={tag.trim()}
+                      className="px-2 py-0.5 bg-secondary/10 text-secondary rounded text-xs font-medium"
+                    >
                       {tag.trim()}
                     </span>
                   ))}
@@ -80,11 +90,16 @@ export default async function BlogPostPage({
 
             {/* Bottom Navigation */}
             <div className="mt-16 pt-8 border-t border-border">
-              <Link 
-                href="/blog" 
+              <Link
+                href="/blog"
                 className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary/80 transition-colors group"
               >
-                <span className="transform group-hover:-translate-x-1 transition-transform" dir="ltr">&rarr;</span>
+                <span
+                  className="transform group-hover:-translate-x-1 transition-transform"
+                  dir="ltr"
+                >
+                  &rarr;
+                </span>
                 {isRtl ? "مقالات أخرى" : "Other Articles"}
               </Link>
             </div>
@@ -95,28 +110,30 @@ export default async function BlogPostPage({
             {/* Featured Image */}
             <figure className="mb-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                alt={title} 
-                className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm border border-border" 
+              <img
+                alt={title}
+                className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm border border-border"
                 src={mainImage}
               />
             </figure>
-            
+
             {/* Thumbnail Slider */}
             {thumbnails.length > 0 && (
               <div className="flex gap-3 overflow-x-auto pb-2 snap-x hide-scrollbar">
                 {thumbnails.map((img, idx) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img 
+                  <img
                     key={idx}
-                    alt={`Thumbnail ${idx + 1}`} 
-                    className="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-border snap-start shrink-0 opacity-70 hover:opacity-100 transition-all" 
+                    alt={`Thumbnail ${idx + 1}`}
+                    className="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-border snap-start shrink-0 opacity-70 hover:opacity-100 transition-all"
                     src={img}
                   />
                 ))}
               </div>
             )}
-            <style dangerouslySetInnerHTML={{__html: `
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
               .hide-scrollbar::-webkit-scrollbar {
                   display: none;
               }
@@ -124,9 +141,10 @@ export default async function BlogPostPage({
                   -ms-overflow-style: none;
                   scrollbar-width: none;
               }
-            `}} />
+            `,
+              }}
+            />
           </div>
-          
         </div>
       </div>
     </div>
