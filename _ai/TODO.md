@@ -27,8 +27,8 @@
 
 - [ ] **3.2** إدخال البيانات الحقيقية في Strapi (نقل من mock)
 
-- [ ] **3.3** إنشاء `strapi.ts` + إعداد API Token
-  - ملف: `frontend/src/lib/strapi.ts`
+- [x] **3.3** إنشاء `strapi.ts` + إعداد API Token — ✅ 2026-05-24
+  - ملف: `frontend/lib/strapi.ts`
   - متغيرات: `frontend/.env.local`
 
 - [ ] **3.4** استبدال mock-data بـ Strapi في كل صفحة

@@ -59,3 +59,10 @@ The Strapi Admin UI is available at `http://localhost:1337/admin`.
 ## API Access & CORS
 - CORS has been configured in `config/middlewares.ts` to explicitly allow origins from the Next.js frontend (`http://localhost:3000`).
 - **IMPORTANT**: To allow the frontend to fetch data from the API, you must log into the Strapi Admin UI and enable the `find` and `findOne` permissions for the Public role under Settings > Roles > Public.
+
+## Frontend Integration
+The Next.js frontend fetches data using the Strapi REST API via `frontend/lib/strapi.ts`.
+To authenticate requests, the frontend uses an API token.
+1. Generate an API token in the Strapi Admin UI (Settings > API Tokens) with read-only access.
+2. Add this token to the `frontend/.env.local` file:
+   `STRAPI_API_TOKEN=your_token_here`
