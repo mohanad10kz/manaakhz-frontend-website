@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import { mockContactInfo } from "@/lib/mock-data";
+import { getContactInfo } from "@/lib/strapi";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Mail, MapPin, Link as LinkIcon } from "lucide-react";
 
@@ -11,7 +11,17 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const { email, location_ar, location_en, social_links } = mockContactInfo;
+  const contactInfo = await getContactInfo(locale);
+
+  if (!contactInfo) {
+    return (
+      <div className="w-full grow flex items-center justify-center py-20">
+        <p className="text-muted-foreground">{locale === 'ar' ? 'لا يوجد محتوى متاح.' : 'No content available.'}</p>
+      </div>
+    );
+  }
+
+  const { email, location_ar, location_en, social_links } = contactInfo;
   const isRtl = locale === "ar";
   const displayLocation = isRtl ? location_ar : location_en;
 
@@ -53,7 +63,7 @@ export default async function ContactPage({
           <div className="mb-12">
             <p className="text-sm font-bold text-foreground mb-4">حساباتي الاجتماعية</p>
             <div className="flex items-center gap-4">
-              {social_links.map((link) => {
+              {social_links && social_links.map((link) => {
                 const Icon = LinkIcon;
                 return (
                   <a

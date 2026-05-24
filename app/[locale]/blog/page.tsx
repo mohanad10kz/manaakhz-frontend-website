@@ -1,5 +1,5 @@
 import { PostList } from "@/components/blog/PostList";
-import { mockPosts } from "@/lib/mock-data";
+import { getAllPosts } from "@/lib/strapi";
 import { setRequestLocale } from "next-intl/server";
 
 export default async function BlogPage({
@@ -10,9 +10,19 @@ export default async function BlogPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const posts = await getAllPosts(locale);
+
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="w-full grow flex items-center justify-center py-20">
+        <p className="text-muted-foreground">{locale === 'ar' ? 'لا يوجد محتوى متاح.' : 'No content available.'}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full grow">
-      <PostList posts={mockPosts} locale={locale} />
+    <div className="w-full flex-grow">
+      <PostList posts={posts} locale={locale} />
     </div>
   );
 }

@@ -1,11 +1,15 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { getDesignBySlug, mockDesigns } from "@/lib/mock-data";
+import { getDesignBySlug, getAllDesigns } from "@/lib/strapi";
 import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
 
-export function generateStaticParams() {
-  return mockDesigns.map((design) => ({
+export async function generateStaticParams() {
+  const designs = await getAllDesigns();
+  if (!designs || designs.length === 0) {
+    return [{ slug: 'empty' }];
+  }
+  return designs.map((design) => ({
     slug: design.slug,
   }));
 }
@@ -17,7 +21,7 @@ export default async function DesignPostPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const design = getDesignBySlug(slug);
+  const design = await getDesignBySlug(slug, locale);
 
   if (!design) {
     notFound();

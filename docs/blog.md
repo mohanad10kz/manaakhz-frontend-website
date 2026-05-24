@@ -19,4 +19,4 @@ The Blog page lists articles and thoughts on electronics, design, and technology
   - **Features**: "Back to Blog" link, title, date, tags, and the main content.
 
 ## Data Source
-- Uses `mockPosts` and `getPostBySlug` from `lib/mock-data.ts`.
+- Uses `getAllPosts(locale)` and `getPostBySlug(slug, locale)` from `lib/strapi.ts`.

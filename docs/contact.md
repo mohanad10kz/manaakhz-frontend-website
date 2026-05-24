@@ -10,7 +10,7 @@ The Contact page provides ways for users to get in touch with the engineer.
 - **Localization**: Uses `getTranslations` from `next-intl/server` to fetch translations directly in the Server Component. Location text automatically switches between Arabic and English.
 
 ## Data Source
-- Uses `mockContactInfo` from `lib/mock-data.ts`.
+- Uses `getContactInfo(locale)` from `lib/strapi.ts`.
 
 ## Routing
 - Located at `app/[locale]/contact/page.tsx`.

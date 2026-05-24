@@ -1,14 +1,11 @@
-import { mockAbout, mockContactInfo } from "@/lib/mock-data";
+import { About, ContactInfo } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Link as LinkIcon } from "lucide-react";
 
-export function BiographyCard({ locale }: { locale: string }) {
+export function BiographyCard({ locale, about }: { locale: string, about: About }) {
   const isRtl = locale === "ar";
-  const { name, bio_ar, bio_en, nationality } = mockAbout;
-
-  // Use mockContactInfo for social links
-  const socialLinks = mockContactInfo.social_links;
+  const { name, bio_ar, bio_en, nationality, skills, social_links } = about;
 
   return (
     <div className="container max-w-275 mx-auto px-6 py-20 bg-background">
@@ -35,7 +32,7 @@ export function BiographyCard({ locale }: { locale: string }) {
           </p>
 
           <div className="flex items-center gap-4">
-            {socialLinks.map((social) => {
+            {social_links.map((social) => {
               const Icon = LinkIcon;
               return (
                 <a
@@ -73,14 +70,7 @@ export function BiographyCard({ locale }: { locale: string }) {
               المهارات
             </h3>
             <div className="flex flex-wrap gap-3">
-              {[
-                "تصميم دوائر",
-                "Altium Designer",
-                "KiCad",
-                "برمجة مضمّنة",
-                "Arduino",
-                "PCB Layout",
-              ].map((skill) => (
+              {skills.map((skill) => (
                 <Badge
                   key={skill}
                   variant="outline"

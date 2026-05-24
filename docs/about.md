@@ -13,7 +13,7 @@ The About page provides detailed information about the engineer, including their
   - Displays birth date, nationality, and social links using `lucide-react` icons.
 
 ## Data Source
-- Uses `mockAbout` from `lib/mock-data.ts`.
+- Uses `getAbout(locale)` from `lib/strapi.ts`.
 
 ## Routing
 - Located at `app/[locale]/about/page.tsx`.

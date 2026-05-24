@@ -19,4 +19,4 @@ The Design page showcases a collection of electronic circuit designs and PCBs.
   - **Features**: Includes a "Back" button with a localized arrow icon, a large hero image, and the full description text.
 
 ## Data Source
-- Uses `mockDesigns` and `getDesignBySlug` from `lib/mock-data.ts`.
+- Uses `getAllDesigns(locale)` and `getDesignBySlug(slug, locale)` from `lib/strapi.ts`.

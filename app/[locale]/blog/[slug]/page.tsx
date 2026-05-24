@@ -1,11 +1,15 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { getPostBySlug, mockPosts } from "@/lib/mock-data";
+import { getPostBySlug, getAllPosts } from "@/lib/strapi";
 import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
 
-export function generateStaticParams() {
-  return mockPosts.map((post) => ({
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  if (!posts || posts.length === 0) {
+    return [{ slug: 'empty' }];
+  }
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
@@ -17,7 +21,7 @@ export default async function BlogPostPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug, locale);
 
   if (!post) {
     notFound();

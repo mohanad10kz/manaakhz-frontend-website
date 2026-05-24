@@ -31,7 +31,7 @@
   - ملف: `frontend/lib/strapi.ts`
   - متغيرات: `frontend/.env.local`
 
-- [ ] **3.4** استبدال mock-data بـ Strapi في كل صفحة
+- [x] **3.4** استبدال mock-data بـ Strapi في كل صفحة — ✅ 2026-05-24
   - home ← about ← design ← blog ← contact
 
 ---

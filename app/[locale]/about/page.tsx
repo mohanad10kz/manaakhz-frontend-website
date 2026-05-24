@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { BiographyCard } from "@/components/about/BiographyCard";
+import { getAbout } from "@/lib/strapi";
 
 export default async function AboutPage({
   params,
@@ -9,15 +10,19 @@ export default async function AboutPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  // Note: we can't easily use useTranslations inside Server Components without passing it
-  // or using unstable_setRequestLocale. Since BiographyCard is a client component or handles
-  // translation itself, we can let it handle the content. Wait, BiographyCard uses `useTranslations`,
-  // which works in Server Components in App Router if setup correctly, but it's simpler to just
-  // render the card.
+  const aboutData = await getAbout(locale);
+
+  if (!aboutData) {
+    return (
+      <div className="w-full grow flex items-center justify-center py-20">
+        <p className="text-muted-foreground">{locale === 'ar' ? 'لا يوجد محتوى متاح.' : 'No content available.'}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full grow">
-      <BiographyCard locale={locale} />
+      <BiographyCard locale={locale} about={aboutData} />
     </div>
   );
 }
