@@ -1,6 +1,7 @@
 import { DesignGrid } from "@/components/design/DesignGrid";
-import { getAllDesigns, getCategories } from "@/lib/strapi";
+import { getDesignsPaginated, getCategories } from "@/lib/strapi";
 import { setRequestLocale } from "next-intl/server";
+import Pagination from "@/components/shared/Pagination";
 
 export default async function DesignPage({
   params,
@@ -11,10 +12,12 @@ export default async function DesignPage({
   setRequestLocale(locale);
 
   // Fetch designs and categories in parallel
-  const [designs, categories] = await Promise.all([
-    getAllDesigns(locale),
+  const [{ designs, pagination }, categories] = await Promise.all([
+    getDesignsPaginated(1),
     getCategories(),
   ]);
+
+  const totalPages = pagination.pageCount;
 
   if (!designs || designs.length === 0) {
     return (
@@ -29,6 +32,12 @@ export default async function DesignPage({
   return (
     <div className="w-full grow">
       <DesignGrid designs={designs} categories={categories} locale={locale} />
+      <Pagination
+        currentPage={1}
+        totalPages={totalPages}
+        firstPagePath={`/design`}
+        otherPagePath={`/design-page`}
+      />
     </div>
   );
 }

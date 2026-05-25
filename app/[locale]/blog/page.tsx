@@ -1,6 +1,7 @@
 import { PostList } from "@/components/blog/PostList";
-import { getAllPosts } from "@/lib/strapi";
+import { getPostsPaginated } from "@/lib/strapi";
 import { setRequestLocale } from "next-intl/server";
+import Pagination from "@/components/shared/Pagination";
 
 export default async function BlogPage({
   params,
@@ -10,7 +11,8 @@ export default async function BlogPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const posts = await getAllPosts(locale);
+  const { posts, pagination } = await getPostsPaginated(1);
+  const totalPages = pagination.pageCount;
 
   if (!posts || posts.length === 0) {
     return (
@@ -23,6 +25,12 @@ export default async function BlogPage({
   return (
     <div className="w-full flex-grow">
       <PostList posts={posts} locale={locale} />
+      <Pagination
+        currentPage={1}
+        totalPages={totalPages}
+        firstPagePath={`/blog`}
+        otherPagePath={`/blog-page`}
+      />
     </div>
   );
 }

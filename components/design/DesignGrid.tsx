@@ -70,7 +70,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
       )}
 
       {/* Masonry Grid */}
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredDesigns.map((design) => {
           const title = isRtl ? design.title_ar : design.title_en;
           const descBlocks = isRtl
@@ -94,16 +94,23 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
             <Link
               href={`/design/${design.slug}`}
               key={design.id}
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  sessionStorage.setItem("last_design_page", window.location.pathname);
+                }
+              }}
               className="break-inside-avoid relative overflow-hidden rounded-[8px] border border-border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer block"
             >
               <div className="p-6 flex flex-col gap-3">
                 {/* Category badge — only if category exists */}
-                {categoryLabel && (
+                
                   <span className="inline-block self-start bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-                    {categoryLabel}
+                    {categoryLabel || "<>"}
                   </span>
-                )}
-                <h3 className="text-xl font-bold font-sans text-card-foreground">
+                
+                <h3 className={`text-xl font-bold font-sans text-card-foreground ${
+                  categoryLabel ? "mt-0" : "mt-0"
+                }`}>
                   {title}
                 </h3>
                 <p className="text-muted-foreground line-clamp-2 leading-relaxed">

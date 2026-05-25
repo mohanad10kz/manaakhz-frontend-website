@@ -19,13 +19,15 @@ backend/src/api/design/content-types/design/schema.json      ← هيكل بيا
 
 ### Frontend (Next.js)
 ```
-frontend/lib/types.ts                           ← تحديث أنواع البيانات لدعم Category كعلاقة
-frontend/lib/strapi.ts                          ← تحديث جلب البيانات ودعم populate للـ Category
-frontend/lib/mock-data.ts                       ← تحديث البيانات الوهمية للمحاكاة المحلية
-frontend/components/design/DesignGrid.tsx       ← شبكة عرض التصاميم مع الفلترة بالفئات الديناميكية
-frontend/app/[locale]/design/page.tsx           ← جلب الفئات والتصاميم وتمريرها للمكون
-frontend/app/[locale]/design/[slug]/page.tsx    ← عرض تفاصيل التصميم مع الفئة ثنائية اللغة
-frontend/components/design/DesignGallery.tsx    ← معرض الصور والفيديوهات
+frontend/lib/types.ts                               ← تحديث أنواع البيانات لدعم Category كعلاقة
+frontend/lib/strapi.ts                              ← تحديث جلب البيانات وإضافة دوال Pagination
+frontend/lib/constants.ts                           ← إضافة ثوابت عدد العناصر بالصفحة (12 للتصاميم)
+frontend/components/shared/Pagination.tsx           ← مكوّن الـ Pagination المشترك والمتوافق مع ألوان الموقع
+frontend/components/design/DesignGrid.tsx           ← شبكة عرض التصاميم مع الفلترة بالفئات الديناميكية
+frontend/app/[locale]/design/page.tsx               ← جلب الصفحة 1 وعرض الـ Pagination
+frontend/app/[locale]/design/page/[pageNum]/page.tsx ← المسار الديناميكي الاستاتيكي لـ Pagination الصفحات (2، 3...)
+frontend/app/[locale]/design/[slug]/page.tsx        ← عرض تفاصيل التصميم مع الفئة ثنائية اللغة
+frontend/components/design/DesignGallery.tsx        ← معرض الصور والفيديوهات
 ```
 
 ---

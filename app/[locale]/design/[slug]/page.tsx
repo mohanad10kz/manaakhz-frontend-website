@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
 import { DesignGallery } from "@/components/design/DesignGallery";
 import RichTextRenderer from "@/components/shared/RichTextRenderer";
+import SmartBackLink from "@/components/shared/SmartBackLink";
 
 export async function generateStaticParams() {
   const designs = await getAllDesigns();
@@ -50,9 +51,13 @@ export default async function DesignPostPage({
             الرئيسية
           </Link>
           <ChevronRight className="w-4 h-4" />
-          <Link href="/design" className="hover:text-primary transition-colors">
+          <SmartBackLink
+            fallback={`/${locale}/design`}
+            sessionKey="last_design_page"
+            className="hover:text-primary transition-colors"
+          >
             تصاميم الدوائر
-          </Link>
+          </SmartBackLink>
           <ChevronRight className="w-4 h-4" />
           <span aria-current="page" className="text-foreground font-medium">
             {title}
@@ -98,8 +103,9 @@ export default async function DesignPostPage({
 
             {/* Bottom Navigation — Hidden on mobile (shown below gallery instead) */}
             <div className="hidden lg:block mt-16 pt-8 border-t border-border">
-              <Link
-                href="/design"
+              <SmartBackLink
+                fallback={`/${locale}/design`}
+                sessionKey="last_design_page"
                 className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary/80 transition-colors group"
               >
                 <span
@@ -109,7 +115,7 @@ export default async function DesignPostPage({
                   &rarr;
                 </span>
                 {isRtl ? "تصاميم أخرى" : "Other Designs"}
-              </Link>
+              </SmartBackLink>
             </div>
           </div>
 
@@ -134,8 +140,9 @@ export default async function DesignPostPage({
 
             {/* Bottom Navigation — Visible on mobile only, after gallery */}
             <div className="lg:hidden mt-10 pt-8 border-t border-border">
-              <Link
-                href="/design"
+              <SmartBackLink
+                fallback={`/${locale}/design`}
+                sessionKey="last_design_page"
                 className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary/80 transition-colors group"
               >
                 <span
@@ -145,7 +152,7 @@ export default async function DesignPostPage({
                   &rarr;
                 </span>
                 {isRtl ? "تصاميم أخرى" : "Other Designs"}
-              </Link>
+              </SmartBackLink>
             </div>
           </div>
         </div>

@@ -69,6 +69,11 @@ export function PostList({ posts, locale }: PostListProps) {
                 <h2 className="text-2xl font-bold font-sans text-foreground mb-3 group-hover:text-primary transition-colors">
                   <Link
                     href={`/blog/${post.slug}`}
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        sessionStorage.setItem("last_blog_page", window.location.pathname);
+                      }
+                    }}
                     className="focus:outline-none"
                   >
                     {title}
@@ -82,21 +87,6 @@ export function PostList({ posts, locale }: PostListProps) {
             </article>
           );
         })}
-      </div>
-
-      {/* Pagination (Decorative) */}
-      <div className="mt-16 flex justify-center items-center gap-4">
-        <button className="text-primary font-medium border-b border-transparent hover:border-primary transition-colors px-2 py-1 flex items-center gap-2">
-          <span dir="ltr">&rarr;</span>
-          {isRtl ? "السابق" : "Previous"}
-        </button>
-        <span className="text-foreground font-bold text-lg">1</span>
-        <span className="text-muted-foreground text-lg">2</span>
-        <span className="text-muted-foreground text-lg">3</span>
-        <button className="text-primary font-medium border-b border-transparent hover:border-primary transition-colors px-2 py-1 flex items-center gap-2">
-          {isRtl ? "التالي" : "Next"}
-          <span dir="ltr">&larr;</span>
-        </button>
       </div>
     </div>
   );

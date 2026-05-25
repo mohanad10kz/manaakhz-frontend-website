@@ -34,7 +34,7 @@ async function fetchStrapi(path: string, params: Record<string, any> = {}) {
 
     const response = await fetch(url.toString(), {
       headers,
-      next: { revalidate: 0 }, // DEBUG: no cache — change back to 3600 after testing
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -287,3 +287,102 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
 }
 
 
+// ──────────────────────────────────────────────────────────
+// Pagination helpers
+// ──────────────────────────────────────────────────────────
+
+import { DESIGNS_PER_PAGE, POSTS_PER_PAGE } from './constants'
+
+// ── Design Pagination ──────────────────────────────────────
+
+export async function getDesignsPaginated(page: number) {
+  const headers: HeadersInit = { 'Content-Type': 'application/json' }
+  if (API_TOKEN) headers['Authorization'] = `Bearer ${API_TOKEN}`
+
+  const res = await fetch(
+    `${STRAPI_URL}/api/designs?populate[images]=true&populate[category]=true&pagination[page]=${page}&pagination[pageSize]=${DESIGNS_PER_PAGE}&sort=date:desc`,
+    { headers, next: { revalidate: 3600 } }
+  )
+  if (!res.ok) return { designs: [], pagination: { page, pageCount: 1 } }
+
+  const data = await res.json()
+  const rawDesigns = data?.data ?? []
+
+  const designs: Design[] = rawDesigns.map((item: any): Design => ({
+    id: item.id,
+    slug: item.slug || '',
+    title_ar: item.title_ar || '',
+    title_en: item.title_en || '',
+    description_ar: item.description_ar || [],
+    description_en: item.description_en || [],
+    category: item.category
+      ? { id: item.category.id, slug: item.category.slug || '', name_ar: item.category.name_ar || '', name_en: item.category.name_en || '' }
+      : null,
+    date: item.date || '',
+    images: (Array.isArray(item.images) ? item.images : []).map((img: any) => img?.url || '').filter(Boolean),
+    videos: Array.isArray(item.videos) ? item.videos : [],
+  }))
+
+  return {
+    designs,
+    pagination: data?.meta?.pagination ?? { page, pageCount: 1 },
+  }
+}
+
+export async function getDesignsTotalPages(): Promise<number> {
+  const headers: HeadersInit = { 'Content-Type': 'application/json' }
+  if (API_TOKEN) headers['Authorization'] = `Bearer ${API_TOKEN}`
+
+  const res = await fetch(
+    `${STRAPI_URL}/api/designs?pagination[page]=1&pagination[pageSize]=${DESIGNS_PER_PAGE}`,
+    { headers, next: { revalidate: 3600 } }
+  )
+  if (!res.ok) return 1
+  const data = await res.json()
+  return data?.meta?.pagination?.pageCount ?? 1
+}
+
+// ── Post Pagination ────────────────────────────────────────
+
+export async function getPostsPaginated(page: number) {
+  const headers: HeadersInit = { 'Content-Type': 'application/json' }
+  if (API_TOKEN) headers['Authorization'] = `Bearer ${API_TOKEN}`
+
+  const res = await fetch(
+    `${STRAPI_URL}/api/posts?pagination[page]=${page}&pagination[pageSize]=${POSTS_PER_PAGE}&sort=date:desc`,
+    { headers, next: { revalidate: 3600 } }
+  )
+  if (!res.ok) return { posts: [], pagination: { page, pageCount: 1 } }
+
+  const data = await res.json()
+  const rawPosts = data?.data ?? []
+
+  const posts: Post[] = rawPosts.map((item: any): Post => ({
+    id: item.id,
+    slug: item.slug || '',
+    title_ar: item.title_ar || '',
+    title_en: item.title_en || '',
+    content_ar: item.content_ar || [],
+    content_en: item.content_en || [],
+    date: item.date || '',
+    tags: item.tags || '',
+  }))
+
+  return {
+    posts,
+    pagination: data?.meta?.pagination ?? { page, pageCount: 1 },
+  }
+}
+
+export async function getPostsTotalPages(): Promise<number> {
+  const headers: HeadersInit = { 'Content-Type': 'application/json' }
+  if (API_TOKEN) headers['Authorization'] = `Bearer ${API_TOKEN}`
+
+  const res = await fetch(
+    `${STRAPI_URL}/api/posts?pagination[page]=1&pagination[pageSize]=${POSTS_PER_PAGE}`,
+    { headers, next: { revalidate: 3600 } }
+  )
+  if (!res.ok) return 1
+  const data = await res.json()
+  return data?.meta?.pagination?.pageCount ?? 1
+}

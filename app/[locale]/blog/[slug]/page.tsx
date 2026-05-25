@@ -4,6 +4,7 @@ import { getPostBySlug, getAllPosts } from "@/lib/strapi";
 import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
 import RichTextRenderer from "@/components/shared/RichTextRenderer";
+import SmartBackLink from "@/components/shared/SmartBackLink";
 
 
 export async function generateStaticParams() {
@@ -45,9 +46,13 @@ export default async function BlogPostPage({
             الرئيسية
           </Link>
           <ChevronRight className="w-4 h-4" />
-          <Link href="/blog" className="hover:text-primary transition-colors">
+          <SmartBackLink
+            fallback={`/${locale}/blog`}
+            sessionKey="last_blog_page"
+            className="hover:text-primary transition-colors"
+          >
             أفكاري ومذكراتي
-          </Link>
+          </SmartBackLink>
           <ChevronRight className="w-4 h-4" />
           <span aria-current="page" className="text-foreground font-medium">
             {title}
@@ -94,8 +99,9 @@ export default async function BlogPostPage({
 
             {/* Bottom Navigation */}
             <div className="mt-16 pt-8 border-t border-border">
-              <Link
-                href="/blog"
+              <SmartBackLink
+                fallback={`/${locale}/blog`}
+                sessionKey="last_blog_page"
                 className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary/80 transition-colors group"
               >
                 <span
@@ -105,7 +111,7 @@ export default async function BlogPostPage({
                   &rarr;
                 </span>
                 {isRtl ? "مقالات أخرى" : "Other Articles"}
-              </Link>
+              </SmartBackLink>
             </div>
           </div>
 
