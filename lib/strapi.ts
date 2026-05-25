@@ -175,7 +175,8 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getAllDesigns(locale?: string): Promise<Design[]> {
-  // Use explicit populate to include the category relation
+  // Use explicit populate to include the category relation and images
+  // blocks fields (description_ar/en) are returned automatically
   const json = await fetchStrapi("/designs", {
     "populate[images]": "true",
     "populate[category]": "true",
@@ -187,8 +188,8 @@ export async function getAllDesigns(locale?: string): Promise<Design[]> {
     slug: data.slug || "",
     title_ar: data.title_ar || "",
     title_en: data.title_en || "",
-    description_ar: data.description_ar || "",
-    description_en: data.description_en || "",
+    description_ar: data.description_ar || [],
+    description_en: data.description_en || [],
     category: extractCategory(data.category),
     date: data.date || "",
     images: extractMediaUrls(data.images),
@@ -206,16 +207,13 @@ export async function getDesignBySlug(slug: string, locale?: string): Promise<De
 
   const data = json.data[0];
 
-  // Debug: log the raw videos value so you can see what Strapi returns
-  console.log(`[strapi] design "${slug}" raw videos:`, JSON.stringify(data.videos));
-
   return {
     id: data.id,
     slug: data.slug || "",
     title_ar: data.title_ar || "",
     title_en: data.title_en || "",
-    description_ar: data.description_ar || "",
-    description_en: data.description_en || "",
+    description_ar: data.description_ar || [],
+    description_en: data.description_en || [],
     category: extractCategory(data.category),
     date: data.date || "",
     images: extractMediaUrls(data.images),
@@ -225,10 +223,8 @@ export async function getDesignBySlug(slug: string, locale?: string): Promise<De
 
 export async function getAllPosts(locale?: string): Promise<Post[]> {
   // blocks fields are returned automatically — no deep populate needed
-  // only images relation needs explicit populate
-  const json = await fetchStrapi("/posts", {
-    "populate[images]": "true",
-  });
+  // blocks fields are returned automatically — no populate needed
+  const json = await fetchStrapi("/posts");
   if (!json?.data) return [];
 
   return json.data.map((data: any): Post => ({
@@ -240,16 +236,13 @@ export async function getAllPosts(locale?: string): Promise<Post[]> {
     content_en: data.content_en || [],
     date: data.date || "",
     tags: data.tags || "",
-    images: extractMediaUrls(data.images),
   }));
 }
 
 export async function getPostBySlug(slug: string, locale?: string): Promise<Post | null> {
-  // blocks fields are returned automatically — no deep populate needed
-  // only images relation needs explicit populate
+  // blocks fields are returned automatically — no populate needed
   const json = await fetchStrapi("/posts", {
     "filters[slug][$eq]": slug,
-    "populate[images]": "true",
   });
   if (!json?.data || json.data.length === 0) return null;
 
@@ -263,7 +256,6 @@ export async function getPostBySlug(slug: string, locale?: string): Promise<Post
     content_en: data.content_en || [],
     date: data.date || "",
     tags: data.tags || "",
-    images: extractMediaUrls(data.images),
   };
 }
 

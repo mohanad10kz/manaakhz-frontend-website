@@ -65,8 +65,8 @@ export type Design = {
   slug: string;
   title_ar: string;
   title_en: string;
-  description_ar: string;
-  description_en: string;
+  description_ar: BlocksContent;
+  description_en: BlocksContent;
   category: Category | null;   // relation اختيارية من Strapi
   date: string;
   images: string[];
@@ -82,7 +82,6 @@ export type Post = {
   content_en: BlocksContent;
   date: string;
   tags: string;
-  images: string[];
 };
 
 export type ContactInfo = {

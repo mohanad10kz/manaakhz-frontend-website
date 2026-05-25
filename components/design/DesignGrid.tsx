@@ -73,9 +73,17 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
       <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
         {filteredDesigns.map((design) => {
           const title = isRtl ? design.title_ar : design.title_en;
-          const description = isRtl
+          const descBlocks = isRtl
             ? design.description_ar
             : design.description_en;
+          // استخراج نص من أول فقرة في الـ blocks للمقتطف
+          const excerpt = (() => {
+            if (!Array.isArray(descBlocks) || descBlocks.length === 0) return '';
+            const firstPara = descBlocks.find((b: any) => b.type === 'paragraph');
+            if (!firstPara || !Array.isArray(firstPara.children)) return '';
+            const text = firstPara.children.map((c: any) => c.text || '').join('');
+            return text.length > 120 ? text.substring(0, 120) + '...' : text;
+          })();
           const categoryLabel = design.category
             ? isRtl
               ? design.category.name_ar
@@ -99,7 +107,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
                   {title}
                 </h3>
                 <p className="text-muted-foreground line-clamp-2 leading-relaxed">
-                  {description}
+                  {excerpt}
                 </p>
                 <span className="mt-2 border border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground rounded-lg px-4 py-1.5 transition-colors w-fit text-sm font-bold">
                   {t("view_details")}

@@ -4,6 +4,7 @@ import { getDesignBySlug, getAllDesigns } from "@/lib/strapi";
 import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
 import { DesignGallery } from "@/components/design/DesignGallery";
+import RichTextRenderer from "@/components/shared/RichTextRenderer";
 
 export async function generateStaticParams() {
   const designs = await getAllDesigns();
@@ -72,7 +73,7 @@ export default async function DesignPostPage({
               <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm mt-6">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="w-4 h-4" />
-                  <span>{isRtl ? "مُضاف حديثاً" : "Recently Added"}</span>
+                  <span>{design.date}</span>
                 </span>
                 <span className="w-1 h-1 rounded-full bg-muted-foreground opacity-50"></span>
                 <span className="flex items-center gap-2">
@@ -87,8 +88,12 @@ export default async function DesignPostPage({
             </header>
 
             {/* Article Body */}
-            <article className="prose prose-lg max-w-none text-foreground/90 leading-relaxed font-sans prose-p:mb-6 prose-a:text-primary hover:prose-a:text-primary/80 transition-colors">
-              <div className="whitespace-pre-wrap font-semibold text-lg">{description}</div>
+            <article className="max-w-none text-foreground/90 leading-relaxed font-sans">
+              <RichTextRenderer
+                content={description}
+                dir={isRtl ? "rtl" : "ltr"}
+                className="text-lg"
+              />
             </article>
 
             {/* Bottom Navigation — Hidden on mobile (shown below gallery instead) */}
