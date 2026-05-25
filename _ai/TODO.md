@@ -1,28 +1,25 @@
 # TODO — manaakhz.com
+
 > حدّث هذا الملف بعد كل مهمة منجزة. المهمة الأولى في القائمة هي التالية دائماً.
 
 ---
 
 ## 🔴 المرحلة 1 — الإعداد والبيانات الوهمية
 
-
 ---
 
 ## 🟡 المرحلة 2 — الصفحات (بيانات وهمية)
-
-
-
-
-
 
 ---
 
 ## 🟢 المرحلة 3 — ربط الباك إند (Strapi)
 
 - [x] **3.1** إنشاء مشروع Strapi 5 + Content Types — ✅ 2026-05-24
+
   ```bash
   npx create-strapi-app@latest backend --quickstart
   ```
+
   Content Types: About, Design, Post, ContactInfo, SocialLink
 
 - [x] **3.2** رفع بيانات About الحقيقية عبر Seed Script — ✅ 2026-05-24 (نقل من mock)
@@ -47,8 +44,10 @@
 ---
 
 ## ✅ منجز
+
 <!-- أنقل المهام هنا بعد إنجازها مع تاريخ الإنجاز -->
 <!-- مثال: - [x] 1.1 إنشاء مشروع Next.js — ✅ 2026-05-24 -->
+
 - [x] **1.1** تهيئة هيكل المشروع (Git, Folders, .gitignore, README) — ✅ 2026-05-24
 - [x] **1.2** إعداد `next.config.ts` للـ Static Export + i18n routing — ✅ 2026-05-24
 - [x] **1.3** إنشاء ملفات الترجمة (ar.json / en.json) — ✅ 2026-05-24

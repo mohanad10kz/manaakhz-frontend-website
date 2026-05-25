@@ -1,13 +1,6 @@
 import { About } from "@/lib/types";
 import { useTranslations } from "next-intl";
-import {
-  Cake,
-  Users,
-  GraduationCap,
-  Award,
-  MapPin,
-  Download,
-} from "lucide-react";
+import { Cake, Users, GraduationCap, Award, MapPin } from "lucide-react";
 import ExportedImage from "next-image-export-optimizer";
 
 interface HeroBentoProps {
@@ -33,16 +26,13 @@ export function HeroBento({ about, locale }: HeroBentoProps) {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
       {/* Profile Image & Core Identity - col-span 5 */}
-      <div className="col-span-1 lg:col-span-5 flex flex-col items-center text-center p-8 bg-gradient-to-b from-card to-muted rounded-xl border border-border relative overflow-hidden">
+      <div className="col-span-1 lg:col-span-5 flex flex-col items-center text-center p-8 bg-linear-to-b from-card to-muted rounded-xl border border-border relative overflow-hidden">
         {/* Abstract Background Shape */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
         <div className="w-48 h-48 rounded-full border-4 border-primary p-1 bg-card overflow-hidden mb-6 relative z-10 shadow-lg">
           <ExportedImage
-            src={
-              about.photo ||
-              "https://placehold.co/400x500/3D5A4C/white?text=Profile"
-            }
+            src={about.photo}
             alt={name}
             width={192}
             height={192}
@@ -66,16 +56,6 @@ export function HeroBento({ about, locale }: HeroBentoProps) {
         <p className="text-foreground leading-relaxed text-sm lg:text-base max-w-md relative z-10 mb-8 whitespace-pre-wrap">
           {bio}
         </p>
-
-        {/* <a
-          href="#"
-          className="inline-flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-full font-semibold transition-colors relative z-10"
-        >
-          <Download className="w-5 h-5" />
-          {locale === "ar"
-            ? "تحميل السيرة الذاتية (PDF)"
-            : "Download Resume (PDF)"}
-        </a> */}
       </div>
 
       {/* Personal Info Grid - col-span 7 */}

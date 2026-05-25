@@ -3,6 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import { getDesignBySlug, getAllDesigns } from "@/lib/strapi";
 import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
+import { DesignGallery } from "@/components/design/DesignGallery";
 
 export async function generateStaticParams() {
   const designs = await getAllDesigns();
@@ -32,8 +33,9 @@ export default async function DesignPostPage({
   const description = isRtl ? design.description_ar : design.description_en;
 
   const images = design.images || [];
-  const mainImage = images[0] || "https://placehold.co/800x600?text=Design";
-  const thumbnails = images.slice(0, 4);
+  const videos = design.videos || [];
+
+  const hasMedia = images.length > 0 || videos.length > 0;
 
   return (
     <div className="grow pt-16 pb-20">
@@ -75,9 +77,11 @@ export default async function DesignPostPage({
                 <span className="w-1 h-1 rounded-full bg-muted-foreground opacity-50"></span>
                 <span className="flex items-center gap-2">
                   <Tag className="w-4 h-4" />
-                  <span className="px-2 py-0.5 bg-secondary/10 text-secondary rounded text-xs font-medium">
-                    {design.category}
-                  </span>
+                  {design.category ? (
+                    <span className="px-2 py-0.5 bg-secondary/10 text-secondary rounded text-xs font-medium">
+                      {isRtl ? design.category.name_ar : design.category.name_en}
+                    </span>
+                  ) : null}
                 </span>
               </div>
             </header>
@@ -87,8 +91,8 @@ export default async function DesignPostPage({
               <div className="whitespace-pre-wrap">{description}</div>
             </article>
 
-            {/* Bottom Navigation */}
-            <div className="mt-16 pt-8 border-t border-border">
+            {/* Bottom Navigation — Hidden on mobile (shown below gallery instead) */}
+            <div className="hidden lg:block mt-16 pt-8 border-t border-border">
               <Link
                 href="/design"
                 className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary/80 transition-colors group"
@@ -104,45 +108,40 @@ export default async function DesignPostPage({
             </div>
           </div>
 
-          {/* Left Column (Image Gallery) */}
+          {/* Left Column (Gallery) */}
           <div className="lg:col-span-5 lg:sticky lg:top-28">
-            {/* Featured Image */}
-            <figure className="mb-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt={title}
-                className="w-full aspect-4/3 object-cover rounded-xl shadow-sm border border-border"
-                src={mainImage}
+            {hasMedia ? (
+              <DesignGallery
+                images={images}
+                videos={videos}
+                title={title}
+                isRtl={isRtl}
               />
-            </figure>
-
-            {/* Thumbnail Slider */}
-            {thumbnails.length > 0 && (
-              <div className="flex gap-3 overflow-x-auto pb-2 snap-x hide-scrollbar">
-                {thumbnails.map((img, idx) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={idx}
-                    alt={`Thumbnail ${idx + 1}`}
-                    className="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-border snap-start shrink-0 opacity-70 hover:opacity-100 transition-all"
-                    src={img}
-                  />
-                ))}
+            ) : (
+              /* No media placeholder */
+              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/50 py-16 text-center text-muted-foreground">
+                <span className="text-4xl mb-3">🖼️</span>
+                <p className="text-sm font-medium">
+                  {isRtl ? "لا توجد صور أو فيديوهات" : "No images or videos"}
+                </p>
               </div>
             )}
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-              .hide-scrollbar::-webkit-scrollbar {
-                  display: none;
-              }
-              .hide-scrollbar {
-                  -ms-overflow-style: none;
-                  scrollbar-width: none;
-              }
-            `,
-              }}
-            />
+
+            {/* Bottom Navigation — Visible on mobile only, after gallery */}
+            <div className="lg:hidden mt-10 pt-8 border-t border-border">
+              <Link
+                href="/design"
+                className="inline-flex items-center gap-2 text-primary font-bold hover:text-primary/80 transition-colors group"
+              >
+                <span
+                  className="transform group-hover:-translate-x-1 transition-transform"
+                  dir="ltr"
+                >
+                  &rarr;
+                </span>
+                {isRtl ? "تصاميم أخرى" : "Other Designs"}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

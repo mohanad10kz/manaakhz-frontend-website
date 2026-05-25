@@ -1,4 +1,4 @@
-import { About, ContactInfo, Design, Post, SocialLink } from "./types";
+import { About, Category, ContactInfo, Design, Post, SocialLink } from "./types";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -34,7 +34,7 @@ async function fetchStrapi(path: string, params: Record<string, any> = {}) {
 
     const response = await fetch(url.toString(), {
       headers,
-      next: { revalidate: 3600 }, // ISR - 1 hour
+      next: { revalidate: 0 }, // DEBUG: no cache — change back to 3600 after testing
     });
 
     if (!response.ok) {
@@ -64,9 +64,47 @@ function extractMediaUrls(media: any): string[] {
   }).filter(Boolean);
 }
 
+/**
+ * Helper to parse videos field from Strapi JSON field.
+ * Handles: string (single URL), string[] (array), null/undefined.
+ */
+function extractVideos(raw: any): string[] {
+  if (!raw) return [];
+  // Already an array
+  if (Array.isArray(raw)) return raw.filter((v) => typeof v === "string" && v.trim());
+  // Single URL stored as a plain string
+  if (typeof raw === "string") {
+    const trimmed = raw.trim();
+    // Try to parse as JSON first (e.g. '["url"]')
+    if (trimmed.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.filter((v) => typeof v === "string" && v.trim());
+      } catch { /* ignore */ }
+    }
+    // Single URL string
+    return trimmed ? [trimmed] : [];
+  }
+  return [];
+}
+
 // ----------------------------------------------------------------------
 // API Functions
 // ----------------------------------------------------------------------
+
+/**
+ * Helper to extract a Category relation from Strapi response.
+ * Returns null if no category is linked.
+ */
+function extractCategory(raw: any): Category | null {
+  if (!raw) return null;
+  return {
+    id: raw.id || 0,
+    slug: raw.slug || "",
+    name_ar: raw.name_ar || "",
+    name_en: raw.name_en || "",
+  };
+}
 
 export async function getAbout(locale?: string): Promise<About | null> {
   const json = await fetchStrapi("/about", {
@@ -125,8 +163,23 @@ export async function getAbout(locale?: string): Promise<About | null> {
   };
 }
 
+export async function getCategories(): Promise<Category[]> {
+  const json = await fetchStrapi("/categories");
+  if (!json?.data) return [];
+  return json.data.map((data: any): Category => ({
+    id: data.id,
+    slug: data.slug || "",
+    name_ar: data.name_ar || "",
+    name_en: data.name_en || "",
+  }));
+}
+
 export async function getAllDesigns(locale?: string): Promise<Design[]> {
-  const json = await fetchStrapi("/designs");
+  // Use explicit populate to include the category relation
+  const json = await fetchStrapi("/designs", {
+    "populate[images]": "true",
+    "populate[category]": "true",
+  });
   if (!json?.data) return [];
 
   return json.data.map((data: any): Design => ({
@@ -136,17 +189,26 @@ export async function getAllDesigns(locale?: string): Promise<Design[]> {
     title_en: data.title_en || "",
     description_ar: data.description_ar || "",
     description_en: data.description_en || "",
-    category: data.category || "other",
+    category: extractCategory(data.category),
     date: data.date || "",
     images: extractMediaUrls(data.images),
+    videos: extractVideos(data.videos),
   }));
 }
 
 export async function getDesignBySlug(slug: string, locale?: string): Promise<Design | null> {
-  const json = await fetchStrapi("/designs", { "filters[slug][$eq]": slug });
+  const json = await fetchStrapi("/designs", {
+    "filters[slug][$eq]": slug,
+    "populate[images]": "true",
+    "populate[category]": "true",
+  });
   if (!json?.data || json.data.length === 0) return null;
 
   const data = json.data[0];
+
+  // Debug: log the raw videos value so you can see what Strapi returns
+  console.log(`[strapi] design "${slug}" raw videos:`, JSON.stringify(data.videos));
+
   return {
     id: data.id,
     slug: data.slug || "",
@@ -154,9 +216,10 @@ export async function getDesignBySlug(slug: string, locale?: string): Promise<De
     title_en: data.title_en || "",
     description_ar: data.description_ar || "",
     description_en: data.description_en || "",
-    category: data.category || "other",
+    category: extractCategory(data.category),
     date: data.date || "",
     images: extractMediaUrls(data.images),
+    videos: extractVideos(data.videos),
   };
 }
 

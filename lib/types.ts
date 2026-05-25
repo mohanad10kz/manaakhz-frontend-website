@@ -51,6 +51,13 @@ export interface About {
   social_links: SocialLink[]
 }
 
+export type Category = {
+  id: number;
+  slug: string;
+  name_ar: string;
+  name_en: string;
+};
+
 export type Design = {
   id: number;
   slug: string;
@@ -58,9 +65,10 @@ export type Design = {
   title_en: string;
   description_ar: string;
   description_en: string;
-  category: string;
+  category: Category | null;   // relation اختيارية من Strapi
   date: string;
   images: string[];
+  videos: string[];
 };
 
 export type Post = {

@@ -61,24 +61,30 @@ export const mockDesigns: Design[] = [
     title_ar: "مصدر طاقة 5 فولت", title_en: "5V Power Supply",
     description_ar: "دائرة مصدر طاقة منظّمة بجهد 5 فولت...",
     description_en: "Regulated 5V power supply circuit...",
-    category: "power", date: "2024-03-15",
-    images: ["https://placehold.co/800x600?text=Design+1"]
+    category: { id: 1, slug: "power", name_ar: "طاقة", name_en: "Power" },
+    date: "2024-03-15",
+    images: ["https://placehold.co/800x600?text=Design+1"],
+    videos: []
   },
   {
     id: 2, slug: "arduino-shield",
     title_ar: "درع أردوينو مخصص", title_en: "Custom Arduino Shield",
     description_ar: "درع لوحة أردوينو لقياس درجة الحرارة والرطوبة...",
     description_en: "Arduino shield for temperature and humidity sensing...",
-    category: "arduino", date: "2024-01-20",
-    images: ["https://placehold.co/800x600?text=Design+2"]
+    category: { id: 2, slug: "arduino", name_ar: "أردوينو", name_en: "Arduino" },
+    date: "2024-01-20",
+    images: ["https://placehold.co/800x600?text=Design+2"],
+    videos: []
   },
   {
     id: 3, slug: "555-timer-circuit",
     title_ar: "دائرة مؤقت 555", title_en: "555 Timer Circuit",
     description_ar: "دائرة كلاسيكية باستخدام IC 555 لتوليد نبضات...",
     description_en: "Classic 555 timer IC circuit for pulse generation...",
-    category: "basic", date: "2023-11-10",
-    images: ["https://placehold.co/800x600?text=Design+3"]
+    category: { id: 3, slug: "basic", name_ar: "دوائر أساسية", name_en: "Basic Circuits" },
+    date: "2023-11-10",
+    images: ["https://placehold.co/800x600?text=Design+3"],
+    videos: []
   }
 ];
 
