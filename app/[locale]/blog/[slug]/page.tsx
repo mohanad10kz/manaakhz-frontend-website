@@ -3,6 +3,8 @@ import { setRequestLocale } from "next-intl/server";
 import { getPostBySlug, getAllPosts } from "@/lib/strapi";
 import { Link } from "@/i18n/routing";
 import { ChevronRight, Calendar, Tag } from "lucide-react";
+import RichTextRenderer from "@/components/shared/RichTextRenderer";
+
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -31,10 +33,6 @@ export default async function BlogPostPage({
   const title = isRtl ? post.title_ar : post.title_en;
   const content = isRtl ? post.content_ar : post.content_en;
 
-  const images = post.images || [];
-  const mainImage = images[0] || "https://placehold.co/800x600?text=Post";
-  const thumbnails = images.slice(0, 4);
-
   return (
     <div className="flex-grow pt-16 pb-20">
       <div className="max-w-[1100px] mx-auto px-6">
@@ -56,9 +54,7 @@ export default async function BlogPostPage({
           </span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Right Column (Text Content) */}
-          <div className="lg:col-span-7">
+        <div className="flex flex-col items-start">
             {/* Post Header */}
             <header className="mb-12">
               <h1 className="text-3xl md:text-5xl font-bold font-sans text-foreground mb-6 relative inline-block leading-tight">
@@ -88,8 +84,12 @@ export default async function BlogPostPage({
             </header>
 
             {/* Article Body */}
-            <article className="prose prose-lg max-w-none text-foreground/90 leading-relaxed font-sans prose-p:mb-6 prose-a:text-primary hover:prose-a:text-primary/80 transition-colors">
-              <div className="whitespace-pre-wrap">{content}</div>
+            <article className="max-w-none text-foreground/90 leading-relaxed font-sans">
+              <RichTextRenderer
+                content={content}
+                dir={isRtl ? "rtl" : "ltr"}
+                className="prose-lg text-foreground/90"
+              />
             </article>
 
             {/* Bottom Navigation */}
@@ -109,47 +109,6 @@ export default async function BlogPostPage({
             </div>
           </div>
 
-          {/* Left Column (Image Gallery) */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28">
-            {/* Featured Image */}
-            <figure className="mb-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt={title}
-                className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm border border-border"
-                src={mainImage}
-              />
-            </figure>
-
-            {/* Thumbnail Slider */}
-            {thumbnails.length > 0 && (
-              <div className="flex gap-3 overflow-x-auto pb-2 snap-x hide-scrollbar">
-                {thumbnails.map((img, idx) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={idx}
-                    alt={`Thumbnail ${idx + 1}`}
-                    className="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-border snap-start shrink-0 opacity-70 hover:opacity-100 transition-all"
-                    src={img}
-                  />
-                ))}
-              </div>
-            )}
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-              .hide-scrollbar::-webkit-scrollbar {
-                  display: none;
-              }
-              .hide-scrollbar {
-                  -ms-overflow-style: none;
-                  scrollbar-width: none;
-              }
-            `,
-              }}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );

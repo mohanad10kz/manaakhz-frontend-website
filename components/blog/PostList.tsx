@@ -28,8 +28,15 @@ export function PostList({ posts, locale }: PostListProps) {
       <div className="flex flex-col gap-8">
         {posts.map((post, index) => {
           const title = isRtl ? post.title_ar : post.title_en;
-          const contentText = isRtl ? post.content_ar : post.content_en;
-          const excerpt = contentText.substring(0, 150) + "...";
+          const contentBlocks = isRtl ? post.content_ar : post.content_en;
+          // استخراج نص من أول فقرة في الـ blocks
+          const excerpt = (() => {
+            if (!Array.isArray(contentBlocks) || contentBlocks.length === 0) return '';
+            const firstPara = contentBlocks.find((b: any) => b.type === 'paragraph');
+            if (!firstPara || !Array.isArray(firstPara.children)) return '';
+            const text = firstPara.children.map((c: any) => c.text || '').join('');
+            return text.length > 150 ? text.substring(0, 150) + '...' : text;
+          })();
 
           // Alternating background logic based on index
           const bgClass = index % 2 === 0 ? "bg-card" : "bg-muted/30";

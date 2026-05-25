@@ -92,24 +92,24 @@ export const mockPosts: Post[] = [
   {
     id: 1, slug: "why-i-love-electronics",
     title_ar: "لماذا أعشق الإلكترونيات", title_en: "Why I Love Electronics",
-    content_ar: "منذ صغري وأنا مفتون بكيف تعمل الأجهزة...",
-    content_en: "Since childhood, I've been fascinated by how devices work...",
+    content_ar: [{ type: "paragraph", children: [{ type: "text", text: "منذ صغري وأنا مفتون بكيف تعمل الأجهزة..." }] }],
+    content_en: [{ type: "paragraph", children: [{ type: "text", text: "Since childhood, I've been fascinated by how devices work..." }] }],
     date: "2024-04-10", tags: "إلكترونيات, شخصي",
     images: []
   },
   {
     id: 2, slug: "altium-vs-kicad",
     title_ar: "Altium مقابل KiCad: تجربتي", title_en: "Altium vs KiCad: My Experience",
-    content_ar: "بعد سنوات من استخدام كلا البرنامجين...",
-    content_en: "After years of using both tools...",
+    content_ar: [{ type: "paragraph", children: [{ type: "text", text: "بعد سنوات من استخدام كلا البرنامجين..." }] }],
+    content_en: [{ type: "paragraph", children: [{ type: "text", text: "After years of using both tools..." }] }],
     date: "2024-02-05", tags: "أدوات, PCB",
     images: []
   },
   {
     id: 3, slug: "my-first-pcb",
     title_ar: "أول لوحة PCB أصممها", title_en: "My First PCB Design",
-    content_ar: "أتذكر حين رأيت أول لوحة طبعية صممتها...",
-    content_en: "I remember seeing my first printed circuit board design...",
+    content_ar: [{ type: "paragraph", children: [{ type: "text", text: "أتذكر حين رأيت أول لوحة طبعية صممتها..." }] }],
+    content_en: [{ type: "paragraph", children: [{ type: "text", text: "I remember seeing my first printed circuit board design..." }] }],
     date: "2023-09-18", tags: "PCB, ذكريات",
     images: ["https://placehold.co/800x600?text=PCB"]
   }

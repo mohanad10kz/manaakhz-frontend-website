@@ -88,7 +88,7 @@ export default async function DesignPostPage({
 
             {/* Article Body */}
             <article className="prose prose-lg max-w-none text-foreground/90 leading-relaxed font-sans prose-p:mb-6 prose-a:text-primary hover:prose-a:text-primary/80 transition-colors">
-              <div className="whitespace-pre-wrap">{description}</div>
+              <div className="whitespace-pre-wrap font-semibold text-lg">{description}</div>
             </article>
 
             {/* Bottom Navigation — Hidden on mobile (shown below gallery instead) */}

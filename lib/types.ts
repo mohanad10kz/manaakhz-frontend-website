@@ -1,3 +1,5 @@
+import type { BlocksContent } from '@strapi/blocks-react-renderer'
+
 export type SocialLink = {
   platform: string;
   url: string;
@@ -76,8 +78,8 @@ export type Post = {
   slug: string;
   title_ar: string;
   title_en: string;
-  content_ar: string;
-  content_en: string;
+  content_ar: BlocksContent;
+  content_en: BlocksContent;
   date: string;
   tags: string;
   images: string[];

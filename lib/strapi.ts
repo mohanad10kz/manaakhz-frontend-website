@@ -224,7 +224,11 @@ export async function getDesignBySlug(slug: string, locale?: string): Promise<De
 }
 
 export async function getAllPosts(locale?: string): Promise<Post[]> {
-  const json = await fetchStrapi("/posts");
+  // blocks fields are returned automatically — no deep populate needed
+  // only images relation needs explicit populate
+  const json = await fetchStrapi("/posts", {
+    "populate[images]": "true",
+  });
   if (!json?.data) return [];
 
   return json.data.map((data: any): Post => ({
@@ -232,8 +236,8 @@ export async function getAllPosts(locale?: string): Promise<Post[]> {
     slug: data.slug || "",
     title_ar: data.title_ar || "",
     title_en: data.title_en || "",
-    content_ar: extractRichText(data.content_ar),
-    content_en: extractRichText(data.content_en),
+    content_ar: data.content_ar || [],
+    content_en: data.content_en || [],
     date: data.date || "",
     tags: data.tags || "",
     images: extractMediaUrls(data.images),
@@ -241,7 +245,12 @@ export async function getAllPosts(locale?: string): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string, locale?: string): Promise<Post | null> {
-  const json = await fetchStrapi("/posts", { "filters[slug][$eq]": slug });
+  // blocks fields are returned automatically — no deep populate needed
+  // only images relation needs explicit populate
+  const json = await fetchStrapi("/posts", {
+    "filters[slug][$eq]": slug,
+    "populate[images]": "true",
+  });
   if (!json?.data || json.data.length === 0) return null;
 
   const data = json.data[0];
@@ -250,8 +259,8 @@ export async function getPostBySlug(slug: string, locale?: string): Promise<Post
     slug: data.slug || "",
     title_ar: data.title_ar || "",
     title_en: data.title_en || "",
-    content_ar: extractRichText(data.content_ar),
-    content_en: extractRichText(data.content_en),
+    content_ar: data.content_ar || [],
+    content_en: data.content_en || [],
     date: data.date || "",
     tags: data.tags || "",
     images: extractMediaUrls(data.images),
@@ -285,18 +294,4 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
   }));
 }
 
-/**
- * Helper to extract Rich Text content from Strapi 5 format
- * Strapi 5 uses blocks for Rich Text if it's set as blocks, 
- * but our schema uses "richtext" which returns a markdown string.
- */
-function extractRichText(content: any): string {
-  if (!content) return "";
-  if (typeof content === "string") return content;
-  // If it happens to be Strapi 5 blocks
-  try {
-    return JSON.stringify(content);
-  } catch {
-    return "";
-  }
-}
+

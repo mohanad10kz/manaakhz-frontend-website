@@ -1,6 +1,8 @@
 @import "tailwindcss";
+/* @plugin "@tailwindcss/typography"; */
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -177,7 +179,95 @@
     @apply bg-background text-foreground;
     line-height: 1.7;
   }
-  html {
-    @apply font-sans;
-  }
 }
+
+/* ── Rich Text Base (Strapi Blocks Editor) ── */
+.rich-content {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--foreground);
+}
+
+/* ── RTL (Arabic) ── */
+.rich-rtl {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Cairo', sans-serif;
+}
+
+.rich-rtl .heading-2,
+.rich-rtl .heading-3,
+.rich-rtl .heading-4 {
+  color: #B5872A;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rich-rtl .heading-2 { font-size: 1.6rem; }
+.rich-rtl .heading-3 { font-size: 1.35rem; }
+.rich-rtl .heading-4 { font-size: 1.15rem; }
+
+.rich-rtl blockquote {
+  border-right: 4px solid #B5872A;
+  border-left: none;
+  padding-right: 1.25rem;
+  padding-left: 0;
+  margin: 1.5rem 0;
+  color: #5C5C58;
+}
+
+.rich-rtl ul,
+.rich-rtl ol {
+  padding-right: 1.75rem;
+  padding-left: 0;
+}
+
+.rich-rtl a {
+  color: #B5872A;
+  text-decoration: underline;
+}
+
+/* ── LTR (English) ── */
+.rich-ltr {
+  direction: ltr;
+  text-align: left;
+  font-family: 'Source Serif 4', serif;
+}
+
+.rich-ltr .heading-2,
+.rich-ltr .heading-3,
+.rich-ltr .heading-4 {
+  color: #B5872A;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rich-ltr blockquote {
+  border-left: 4px solid #B5872A;
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  color: #5C5C58;
+}
+
+/* ── Code blocks always LTR ── */
+.rich-content pre,
+.rich-content code {
+  direction: ltr;
+  text-align: left;
+}
+
+/* ── Headings (h2-h4) shared styles ── */
+.rich-content h2,
+.rich-content h3,
+.rich-content h4 {
+  color: #B5872A;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rich-content h2 { font-size: 1.6rem; }
+.rich-content h3 { font-size: 1.35rem; }
+.rich-content h4 { font-size: 1.15rem; }

@@ -31,6 +31,10 @@
 - [x] **3.4** استبدال mock-data بـ Strapi في كل صفحة — ✅ 2026-05-24
   - home ← about ← design ← blog ← contact
 
+- [x] **3.5** ربط CKEditor في Strapi وتحديث صفحة المقالات بالكامل — ✅ 2026-05-25
+  - الباك إند: إعداد `plugins.ts` و schema للـ `Post` لاستخدام CKEditor.
+  - الواجهة: إنشاء مكون `RichTextRenderer` مع تعقيم `dompurify` وتنسيق Tailwind Typography.
+
 ---
 
 ## 🔵 المرحلة 4 — الصقل والنشر
