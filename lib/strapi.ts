@@ -34,7 +34,7 @@ async function fetchStrapi(path: string, params: Record<string, any> = {}) {
 
     const response = await fetch(url.toString(), {
       headers,
-      next: { revalidate: 3600 },
+      next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 },
     });
 
     if (!response.ok) {
@@ -198,8 +198,9 @@ export async function getAllDesigns(locale?: string): Promise<Design[]> {
 }
 
 export async function getDesignBySlug(slug: string, locale?: string): Promise<Design | null> {
+  const decodedSlug = decodeURIComponent(slug);
   const json = await fetchStrapi("/designs", {
-    "filters[slug][$eq]": slug,
+    "filters[slug][$eq]": decodedSlug,
     "populate[images]": "true",
     "populate[category]": "true",
   });
@@ -240,9 +241,10 @@ export async function getAllPosts(locale?: string): Promise<Post[]> {
 }
 
 export async function getPostBySlug(slug: string, locale?: string): Promise<Post | null> {
+  const decodedSlug = decodeURIComponent(slug);
   // blocks fields are returned automatically — no populate needed
   const json = await fetchStrapi("/posts", {
-    "filters[slug][$eq]": slug,
+    "filters[slug][$eq]": decodedSlug,
   });
   if (!json?.data || json.data.length === 0) return null;
 
@@ -312,7 +314,7 @@ export async function getDesignsPaginated(page: number) {
 
   const res = await fetch(
     `${STRAPI_URL}/api/designs?populate[images]=true&populate[category]=true&pagination[page]=${page}&pagination[pageSize]=${DESIGNS_PER_PAGE}&sort=date:desc`,
-    { headers, next: { revalidate: 3600 } }
+    { headers, next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } }
   )
   if (!res.ok) return { designs: [], pagination: { page, pageCount: 1 } }
 
@@ -346,7 +348,7 @@ export async function getDesignsTotalPages(): Promise<number> {
 
   const res = await fetch(
     `${STRAPI_URL}/api/designs?pagination[page]=1&pagination[pageSize]=${DESIGNS_PER_PAGE}`,
-    { headers, next: { revalidate: 3600 } }
+    { headers, next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } }
   )
   if (!res.ok) return 1
   const data = await res.json()
@@ -361,7 +363,7 @@ export async function getPostsPaginated(page: number) {
 
   const res = await fetch(
     `${STRAPI_URL}/api/posts?pagination[page]=${page}&pagination[pageSize]=${POSTS_PER_PAGE}&sort=date:desc`,
-    { headers, next: { revalidate: 3600 } }
+    { headers, next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } }
   )
   if (!res.ok) return { posts: [], pagination: { page, pageCount: 1 } }
 
@@ -391,7 +393,7 @@ export async function getPostsTotalPages(): Promise<number> {
 
   const res = await fetch(
     `${STRAPI_URL}/api/posts?pagination[page]=1&pagination[pageSize]=${POSTS_PER_PAGE}`,
-    { headers, next: { revalidate: 3600 } }
+    { headers, next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } }
   )
   if (!res.ok) return 1
   const data = await res.json()
