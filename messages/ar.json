@@ -42,7 +42,16 @@
     "description": "أنا متاح دائمًا للحديث عن مشاريع جديدة أو فرص للتعاون.",
     "email": "البريد الإلكتروني",
     "phone": "رقم الهاتف",
-    "location": "الموقع"
+    "location": "الموقع",
+    "name": "الاسم",
+    "namePlaceholder": "أدخل اسمك",
+    "subject": "الموضوع",
+    "subjectPlaceholder": "موضوع رسالتك",
+    "message": "الرسالة",
+    "messagePlaceholder": "اكتب رسالتك هنا...",
+    "send": "إرسال عبر واتساب",
+    "required": "مطلوب",
+    "followUs": "تابعنا"
   },
   "Layout": {
     "nav": {
