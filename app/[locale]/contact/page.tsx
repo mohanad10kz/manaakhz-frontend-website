@@ -51,6 +51,7 @@ export default async function ContactPage({
                 </p>
                 <a
                   href={`mailto:${email}`}
+                  dir="ltr"
                   className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                 >
                   {email}
@@ -70,6 +71,7 @@ export default async function ContactPage({
                   </p>
                   <a
                     href={`tel:${phone.number}`}
+                    dir="ltr"
                     className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                   >
                     {phone.number}
