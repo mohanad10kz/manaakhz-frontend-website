@@ -68,3 +68,13 @@
 - [x] **2.3** صفحة التصاميم (`DesignGrid`, `DesignCard`) — ✅ 2026-05-24
 - [x] **2.4** صفحة المدونة (`PostList`, `PostCard`) — ✅ 2026-05-24
 - [x] **2.5** صفحة التواصل — ✅ 2026-05-24
+- [x] **contact-update** تحديث صفحة التواصل: Zod + WhatsApp + Dark Mode + Strapi schema جديد — ✅ 2026-06-07
+  - Backend: تحديث schema.json + إنشاء contact.phone و contact.social-link components
+  - Backend: إنشاء seed-contact.mjs
+  - Frontend: تحديث types.ts (Phone, ContactSocialLink, ContactInfo)
+  - Frontend: تحديث strapi.ts (getContactInfo مع populate للـ phones و social_links)
+  - Frontend: استبدال ContactForm.tsx بنسخة جديدة مع Zod validation + WhatsApp submit
+  - Frontend: إنشاء SocialIcons.tsx
+  - Frontend: تحديث contact/page.tsx لعرض أرقام متعددة وأيقونات اجتماعية حقيقية
+  - Messages: إضافة مفاتيح جديدة في ar.json و en.json
+

@@ -84,10 +84,23 @@ export type Post = {
   tags: string;
 };
 
+export interface Phone {
+  number: string
+  label_ar: string
+  label_en: string
+}
+
+export interface ContactSocialLink {
+  platform: 'whatsapp' | 'facebook' | 'youtube'
+  url: string
+  label: string
+}
+
 export type ContactInfo = {
   email: string;
-  phone: string;
+  whatsapp_number: string;
   location_ar: string;
   location_en: string;
-  social_links: SocialLink[];
+  phones: Phone[];
+  social_links: ContactSocialLink[];
 };

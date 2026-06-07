@@ -53,7 +53,7 @@ ContactInfo    (Single Type)  ✅ — مُدخلة
 | Home `/`               | منشأة — تحتاج تعديل   | انتظر التعليمات |
 | Design `/design`       | منشأة — تحتاج تعديل   | انتظر التعليمات |
 | Blog `/blog`           | منشأة — تحتاج تعديل   | انتظر التعليمات |
-| Contact `/contact`     | منشأة — تحتاج تعديل   | انتظر التعليمات |
+| Contact `/contact`     | ✅ مكتملة              | WhatsApp + Zod + Dark Mode + Strapi |
 | Layout (Header/Footer) | منشأ — قد يحتاج تعديل | انتظر التعليمات |
 
 ---

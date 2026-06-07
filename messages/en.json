@@ -42,7 +42,16 @@
     "description": "I'm always open to discussing new projects or collaboration opportunities.",
     "email": "Email",
     "phone": "Phone",
-    "location": "Location"
+    "location": "Location",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "subject": "Subject",
+    "subjectPlaceholder": "Message subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "send": "Send via WhatsApp",
+    "required": "Required",
+    "followUs": "Follow Us"
   },
   "Layout": {
     "nav": {

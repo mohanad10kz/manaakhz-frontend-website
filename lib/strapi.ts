@@ -260,18 +260,29 @@ export async function getPostBySlug(slug: string, locale?: string): Promise<Post
 }
 
 export async function getContactInfo(locale?: string): Promise<ContactInfo | null> {
-  const json = await fetchStrapi("/contact-info");
+  const json = await fetchStrapi('/contact-info', {
+    'populate[phones]': '*',
+    'populate[social_links]': '*',
+  });
   if (!json?.data) return null;
 
   const data = json.data;
-  const socialLinks = await getSocialLinks();
 
   return {
-    email: data.email || "",
-    phone: data.phone || "",
-    location_ar: data.location_ar || "",
-    location_en: data.location_en || "",
-    social_links: socialLinks,
+    email: data.email || '',
+    whatsapp_number: data.whatsapp_number || '',
+    location_ar: data.location_ar || '',
+    location_en: data.location_en || '',
+    phones: (data.phones || []).map((p: any) => ({
+      number: p.number || '',
+      label_ar: p.label_ar || '',
+      label_en: p.label_en || '',
+    })),
+    social_links: (data.social_links || []).map((s: any) => ({
+      platform: s.platform || '',
+      url: s.url || '',
+      label: s.label || '',
+    })),
   };
 }
 
