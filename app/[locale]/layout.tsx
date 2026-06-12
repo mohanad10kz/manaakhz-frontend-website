@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Cairo, Playfair_Display, Source_Serif_4 } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -6,6 +7,7 @@ import { notFound } from "next/navigation";
 import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import "../globals.css";
 
 const cairo = Cairo({
@@ -64,6 +66,9 @@ export default async function LocaleLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
           <NextIntlClientProvider messages={messages}>
             <Header />
             <div className="flex-1 flex flex-col">{children}</div>
