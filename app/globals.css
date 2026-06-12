@@ -271,3 +271,21 @@
 .rich-content h2 { font-size: 1.6rem; }
 .rich-content h3 { font-size: 1.35rem; }
 .rich-content h4 { font-size: 1.15rem; }
+
+/* ── Custom Storytelling Animations ── */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+@keyframes dash-reverse {
+  to {
+    stroke-dashoffset: 100;
+  }
+}
+.animate-dash {
+  animation: dash 20s linear infinite;
+}
+.animate-dash-reverse {
+  animation: dash-reverse 20s linear infinite;
+}

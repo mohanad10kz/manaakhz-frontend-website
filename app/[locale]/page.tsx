@@ -1,6 +1,6 @@
-import { HeroSection } from "@/components/home/HeroSection";
-import { SectionsPreview } from "@/components/home/SectionsPreview";
+import { CinematicHome } from "@/components/home/CinematicHome";
 import { setRequestLocale } from "next-intl/server";
+import { getContactInfo } from "@/lib/strapi";
 
 export default async function HomePage({
   params,
@@ -10,10 +10,13 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const contactInfo = await getContactInfo(locale);
+  const whatsappNumber = contactInfo?.whatsapp_number || "";
+
   return (
-    <>
-      <HeroSection />
-      <SectionsPreview />
-    </>
+    <main className="overflow-x-hidden">
+      <CinematicHome whatsappNumber={whatsappNumber} />
+    </main>
   );
 }
+

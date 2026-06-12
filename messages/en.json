@@ -67,8 +67,41 @@
   },
   "Home": {
     "hero": {
+      "title": "Manaa Electronics",
+      "tagline": "Where ideas are born, and electrons transform into tangible reality",
       "cta_primary": "My Designs",
-      "cta_secondary": "My Thoughts & Blog"
+      "cta_secondary": "Thoughts & Notes"
+    },
+    "blueprint": {
+      "phase": "Phase 1: Hardware Engineering",
+      "title": "Schematics & PCB Design Layouts",
+      "description": "From concepts to production-ready printed circuit boards. Explore circuit boards where traces are routed and components are selected with high precision.",
+      "cta": "Explore Circuit Designs"
+    },
+    "logic": {
+      "phase": "Phase 2: Firmware & Logic Code",
+      "title": "Embedded Systems & Logic Programming",
+      "description": "Hardware requires intelligent logic to breathe. I write firmware for microcontrollers and share troubleshooting logs and technical journals detailing the process.",
+      "cta": "Read Technical Logs"
+    },
+    "datasheet": {
+      "phase": "Phase 3: Technical Specifications",
+      "title": "Technical Datasheet",
+      "description": "Processing specifications and technical metrics of the engineer. Layout capabilities, emulation capacity, and low-level firmware architecture.",
+      "specs": "Core Specifications",
+      "pcb": "PCB Design & Fabrication",
+      "medical": "Medical Equipment Maintenance",
+      "mikroc": "MCU Programming (MikroC)",
+      "vb": "Software Programming (Visual Basic)",
+      "cctv": "CCTV & Security Systems",
+      "web": "Web Design & Development"
+    },
+    "terminal": {
+      "phase": "Phase 4: Communication Gateway",
+      "title": "Serial Interface Connection",
+      "description": "Ready to initiate a system connection or collaborate on a project? Send a query or command to establish connection.",
+      "placeholder": "Type your message to the engineer here...",
+      "send_btn": "Execute Send (WhatsApp)"
     }
   }
 }
