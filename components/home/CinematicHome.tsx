@@ -38,7 +38,7 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
     const container = containerRef.current;
     if (!container) return;
 
-    // 1. INTRO / HERO ENTRANCE (Staggered 3D Zoom Reveal with ScrollTrigger for reverse)
+    // 1. INTRO / HERO ENTRANCE (Staggered 3D Zoom Reveal - Runs immediately on mount)
     gsap.fromTo(".intro-word", 
       {
         opacity: 0,
@@ -52,13 +52,7 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
         transformOrigin: "50% 50% -55px",
         stagger: 0.06,
         duration: 0.8,
-        ease: "back.out(1.15)",
-        scrollTrigger: {
-          trigger: introRef.current,
-          start: "top top",
-          end: "bottom 20%",
-          toggleActions: "play reverse play reverse",
-        }
+        ease: "back.out(1.15)"
       }
     );
 
@@ -73,32 +67,7 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
         duration: 0.7,
         stagger: 0.1,
         ease: "power2.out",
-        scrollTrigger: {
-          trigger: introRef.current,
-          start: "top top",
-          end: "bottom 20%",
-          toggleActions: "play reverse play reverse",
-        }
-      }
-    );
-
-    gsap.fromTo(".cinematic-bar-top",
-      { scaleY: 0 },
-      {
-        scaleY: 1,
-        duration: 0.7,
-        ease: "power3.out",
-        transformOrigin: "top"
-      }
-    );
-
-    gsap.fromTo(".cinematic-bar-bottom",
-      { scaleY: 0 },
-      {
-        scaleY: 1,
-        duration: 0.7,
-        ease: "power3.out",
-        transformOrigin: "bottom"
+        delay: 0.4
       }
     );
 
@@ -318,16 +287,13 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
 
   return (
     <div ref={containerRef} className="relative bg-background text-foreground overflow-hidden">
-      {/* Cinematic Bars (Letterbox effect) - purely graphic bars can have will-change */}
-      <div className="cinematic-bar-top fixed top-0 left-0 right-0 h-[3vh] sm:h-[4.5vh] bg-black z-45 pointer-events-none origin-top [will-change:transform]" />
-      <div className="cinematic-bar-bottom fixed bottom-0 left-0 right-0 h-[3vh] sm:h-[4.5vh] bg-black z-45 pointer-events-none origin-bottom [will-change:transform]" />
 
       {/* ──────────────────────────────────────────────────────── */}
       {/* INTRO HERO SECTION (The Opening Shot)                     */}
       {/* ──────────────────────────────────────────────────────── */}
       <section 
         ref={introRef} 
-        className="relative min-h-screen flex flex-col justify-center items-center px-6 pt-16 pb-12 overflow-hidden bg-gradient-to-b from-background via-muted/20 to-muted/40"
+        className="relative min-h-[calc(100vh-5rem)] flex flex-col justify-center items-center px-6 pt-16 pb-12 overflow-hidden bg-gradient-to-b from-background via-muted/20 to-muted/40"
       >
         {/* Retro Grid Background */}
         <div className="absolute inset-0 opacity-15 pointer-events-none z-0">
