@@ -4,13 +4,7 @@ import { useRef } from "react";
 import { Mail, MapPin, Phone } from "lucide-react";
 import ContactForm from "@/components/contact/ContactForm";
 import SocialIcons from "@/components/contact/SocialIcons";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 import { ContactInfo } from "@/lib/types";
 
@@ -26,7 +20,7 @@ export function ContactContent({ contactInfo, locale }: ContactContentProps) {
   
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGsapLazy((gsap, ScrollTrigger) => {
     // 1. Left column Header Reveal
     gsap.fromTo(".contact-header",
       { opacity: 0, x: isRtl ? 35 : -35 },
@@ -108,7 +102,7 @@ export function ContactContent({ contactInfo, locale }: ContactContentProps) {
         }
       }
     );
-  }, { scope: containerRef });
+  }, containerRef);
 
   return (
     <div ref={containerRef} className="container max-w-[1100px] mx-auto px-6 py-12 md:py-24 bg-background overflow-x-hidden">

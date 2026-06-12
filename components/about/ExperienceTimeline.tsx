@@ -5,13 +5,7 @@ import { useTranslations } from "next-intl";
 import { Briefcase, ChevronRight, ChevronLeft } from "lucide-react";
 import ExportedImage from "next-image-export-optimizer";
 import { useState, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 interface ExperienceTimelineProps {
   about: About;
@@ -94,7 +88,7 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
   const experience = about.experience || [];
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGsapLazy((gsap, ScrollTrigger) => {
     // Animate Header
     gsap.fromTo(".timeline-header",
       { opacity: 0, x: isRtl ? 35 : -35 },
@@ -112,7 +106,7 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
     );
 
     // Animate Timeline Rows
-    const rows = gsap.utils.toArray(".timeline-row");
+    const rows = Array.from(containerRef.current?.querySelectorAll(".timeline-row") || []);
     rows.forEach((row: any) => {
       // Bullet pop in
       gsap.fromTo(row.querySelector(".timeline-bullet"),
@@ -162,7 +156,7 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
         }
       );
     });
-  }, { scope: containerRef });
+  }, containerRef);
 
   return (
     <section ref={containerRef} className="flex flex-col gap-stack-lg">

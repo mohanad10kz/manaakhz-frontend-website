@@ -9,13 +9,7 @@ import {
   Zap, Wrench, Settings, CheckCircle2, ShieldCheck,
   Activity
 } from "lucide-react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 interface CinematicHomeProps {
   whatsappNumber: string;
@@ -34,7 +28,7 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
   const act3Ref = useRef<HTMLDivElement>(null);
 
   // GSAP animations using useGSAP for modern, responsive, lag-free scrolling reveals
-  useGSAP(() => {
+  useGsapLazy((gsap, ScrollTrigger) => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -277,7 +271,7 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
       window.removeEventListener("load", refresh);
       clearTimeout(refreshTimer);
     };
-  }, { scope: containerRef, dependencies: [] }); // Empty dependencies since isRtl is statically determined and stable // Empty dependencies since isRtl is statically determined and stable
+  }, containerRef);
 
   const handleSendToWhatsapp = () => {
     if (!whatsappMsg.trim()) return;

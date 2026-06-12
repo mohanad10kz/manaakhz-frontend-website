@@ -58,9 +58,22 @@ function extractMediaUrls(media: any): string[] {
   const items = Array.isArray(media) ? media : [media];
   return items.map((item: any) => {
     if (!item?.url) return "";
-    // If it's an external URL (e.g. cloudinary, AWS), return as is.
-    // Otherwise, assume it's a local Strapi upload and it has been downloaded to /uploads/...
-    return item.url.startsWith("http") ? item.url : item.url;
+    const rawUrl: string = item.url;
+    // إذا كان URL كاملاً من نفس خادم Strapi → حوّله لمسار محلي /uploads/
+    // هذا يضمن أن الصور تعمل بعد التصدير SSG دون الحاجة لخادم Strapi
+    if (rawUrl.startsWith("http")) {
+      try {
+        const parsed = new URL(rawUrl);
+        if (parsed.pathname.startsWith("/uploads/")) {
+          return parsed.pathname; // e.g. "/uploads/photo_abc123.jpg"
+        }
+      } catch {
+        // URL غير صحيح → أعِده كما هو
+      }
+      // رابط خارجي حقيقي (Cloudinary, AWS, etc.) → أعِده كما هو
+      return rawUrl;
+    }
+    return rawUrl;
   }).filter(Boolean);
 }
 
@@ -332,7 +345,18 @@ export async function getDesignsPaginated(page: number) {
       ? { id: item.category.id, slug: item.category.slug || '', name_ar: item.category.name_ar || '', name_en: item.category.name_en || '' }
       : null,
     date: item.date || '',
-    images: (Array.isArray(item.images) ? item.images : []).map((img: any) => img?.url || '').filter(Boolean),
+    images: (Array.isArray(item.images) ? item.images : []).map((img: any) => {
+      const rawUrl: string = img?.url || '';
+      if (!rawUrl) return '';
+      if (rawUrl.startsWith('http')) {
+        try {
+          const parsed = new URL(rawUrl);
+          if (parsed.pathname.startsWith('/uploads/')) return parsed.pathname;
+        } catch { /* ignore */ }
+        return rawUrl;
+      }
+      return rawUrl;
+    }).filter(Boolean),
     videos: Array.isArray(item.videos) ? item.videos : [],
   }))
 

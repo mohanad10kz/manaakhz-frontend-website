@@ -56,8 +56,20 @@ function extractUrls(data, urls = new Set()) {
     data.forEach(item => extractUrls(item, urls));
   } else if (typeof data === 'object') {
     // If it's a Strapi media object with a url
-    if (data.url && typeof data.url === 'string' && data.url.startsWith('/uploads/')) {
-      urls.add(data.url);
+    if (data.url && typeof data.url === 'string') {
+      const rawUrl = data.url;
+      if (rawUrl.startsWith('/uploads/')) {
+        // مسار نسبي → أضفه مباشرة
+        urls.add(rawUrl);
+      } else if (rawUrl.startsWith('http')) {
+        // URL كامل → استخرج المسار إذا كان /uploads/
+        try {
+          const parsed = new URL(rawUrl);
+          if (parsed.pathname.startsWith('/uploads/')) {
+            urls.add(parsed.pathname);
+          }
+        } catch { /* تجاهل */ }
+      }
     }
     // Check all properties
     for (const key in data) {
@@ -79,7 +91,9 @@ async function downloadImage(urlPath) {
   }
 
   try {
-    const response = await fetch(fullUrl);
+    const response = await fetch(fullUrl, {
+      headers: STRAPI_TOKEN ? { 'Authorization': `Bearer ${STRAPI_TOKEN}` } : {}
+    });
     if (!response.ok) throw new Error(`Status ${response.status}`);
     const buffer = await response.arrayBuffer();
     fs.writeFileSync(dest, Buffer.from(buffer));

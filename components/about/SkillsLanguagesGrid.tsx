@@ -4,13 +4,7 @@ import { About } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Cpu, Languages } from "lucide-react";
 import { useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 interface SkillsLanguagesGridProps {
   about: About;
@@ -25,7 +19,7 @@ export function SkillsLanguagesGrid({ about, locale }: SkillsLanguagesGridProps)
   const skills = isRtl ? about.skills_ar : about.skills_en;
   const languages = about.languages || [];
 
-  useGSAP(() => {
+  useGsapLazy((gsap, ScrollTrigger) => {
     // 1. Skills container slide in
     gsap.fromTo(".skills-container",
       { opacity: 0, x: isRtl ? 35 : -35 },
@@ -94,7 +88,7 @@ export function SkillsLanguagesGrid({ about, locale }: SkillsLanguagesGridProps)
         }
       );
     });
-  }, { scope: containerRef });
+  }, containerRef);
 
   return (
     <section ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 gap-gutter">

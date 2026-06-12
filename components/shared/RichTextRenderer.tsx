@@ -51,21 +51,35 @@ export default function RichTextRenderer({ content, dir = 'rtl', className = '' 
             <p className="mb-4 leading-loose">{children}</p>
           ),
           // صورة
-          image: ({ image }) => (
-            <figure className="my-6">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={image.url}
-                alt={image.alternativeText ?? ''}
-                className="rounded-lg shadow-md mx-auto max-w-full"
-              />
-              {image.caption && (
-                <figcaption className="text-center text-sm text-muted-foreground mt-2">
-                  {image.caption}
-                </figcaption>
-              )}
-            </figure>
-          ),
+          image: ({ image }) => {
+            // تحويل URL الصورة من المسار الكامل إلى محلي
+            // مثال: "http://localhost:1337/uploads/photo.jpg" → "/uploads/photo.jpg"
+            let imgSrc = image.url || '';
+            if (imgSrc.startsWith('http')) {
+              try {
+                const parsed = new URL(imgSrc);
+                if (parsed.pathname.startsWith('/uploads/')) {
+                  imgSrc = parsed.pathname;
+                }
+              } catch { /* ignore */ }
+            }
+
+            return (
+              <figure className="my-6">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imgSrc}
+                  alt={image.alternativeText ?? ''}
+                  className="rounded-lg shadow-md mx-auto max-w-full"
+                />
+                {image.caption && (
+                  <figcaption className="text-center text-sm text-muted-foreground mt-2">
+                    {image.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          },
           // قائمة
           list: ({ children, format }) =>
             format === 'ordered' ? (

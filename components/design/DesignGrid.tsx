@@ -4,13 +4,7 @@ import { useState, useRef } from "react";
 import { Category, Design } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 interface DesignGridProps {
   designs: Design[];
@@ -30,7 +24,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
       ? designs
       : designs.filter((d) => d.category?.slug === activeSlug);
 
-  useGSAP(() => {
+  useGsapLazy((gsap, ScrollTrigger) => {
     // 1. Header Reveal
     gsap.fromTo(".design-header",
       { opacity: 0, y: 30 },
@@ -82,7 +76,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
         }
       }
     );
-  }, { scope: containerRef, dependencies: [filteredDesigns] });
+  }, containerRef, [filteredDesigns]);
 
   return (
     <div ref={containerRef} className="container max-w-275 mx-auto px-6 py-12 md:py-20 overflow-x-hidden">

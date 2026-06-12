@@ -5,13 +5,7 @@ import { useTranslations } from "next-intl";
 import { Cake, Users, GraduationCap, Award, MapPin } from "lucide-react";
 import ExportedImage from "next-image-export-optimizer";
 import { useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 interface HeroBentoProps {
   about: About;
@@ -34,7 +28,7 @@ export function HeroBento({ about, locale }: HeroBentoProps) {
   const education = isRtl ? about.education_ar : about.education_en;
   const memberships = isRtl ? about.memberships_ar : about.memberships_en;
 
-  useGSAP(() => {
+  useGsapLazy((gsap, ScrollTrigger) => {
     // 1. Profile Core Card Reveal
     gsap.fromTo(".bento-profile",
       { opacity: 0, y: 45 },
@@ -107,7 +101,7 @@ export function HeroBento({ about, locale }: HeroBentoProps) {
         }
       }
     );
-  }, { scope: containerRef });
+  }, containerRef);
 
   return (
     <section ref={containerRef} className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">

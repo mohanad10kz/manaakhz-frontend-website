@@ -42,6 +42,7 @@ export default function Pagination({
       {currentPage > 1 ? (
         <Link
           href={getHref(currentPage - 1) as any}
+          prefetch={false}
           className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
         >
           ‹
@@ -60,6 +61,7 @@ export default function Pagination({
           <Link
             key={page}
             href={getHref(page) as any}
+            prefetch={false}
             className={`px-3 py-2 rounded-md text-sm transition-colors ${
               page === currentPage
                 ? 'bg-primary text-primary-foreground font-bold border border-primary'
@@ -75,6 +77,7 @@ export default function Pagination({
       {currentPage < totalPages ? (
         <Link
           href={getHref(currentPage + 1) as any}
+          prefetch={false}
           className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
         >
           ›

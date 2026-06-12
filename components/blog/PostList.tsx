@@ -4,13 +4,7 @@ import { Post } from "@/lib/types";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-}
+import { useGsapLazy } from "@/hooks/useGsapLazy";
 
 interface PostListProps {
   posts: Post[];
@@ -22,15 +16,11 @@ export function PostList({ posts, locale }: PostListProps) {
   const isRtl = locale === "ar";
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    // 1. Header Reveal
+  useGsapLazy((gsap, ScrollTrigger) => {
     gsap.fromTo(".blog-header",
       { opacity: 0, y: 30 },
       {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
+        opacity: 1, y: 0, duration: 0.6, ease: "power2.out",
         scrollTrigger: {
           trigger: ".blog-header",
           start: "top 85%",
@@ -38,16 +28,10 @@ export function PostList({ posts, locale }: PostListProps) {
         }
       }
     );
-
-    // 2. Blog posts list Reveal
     gsap.fromTo(".blog-post-card",
       { opacity: 0, y: 40 },
       {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: "power2.out",
+        opacity: 1, y: 0, stagger: 0.1, duration: 0.6, ease: "power2.out",
         scrollTrigger: {
           trigger: ".blog-list",
           start: "top 85%",
@@ -55,7 +39,7 @@ export function PostList({ posts, locale }: PostListProps) {
         }
       }
     );
-  }, { scope: containerRef });
+  }, containerRef);
 
   return (
     <div ref={containerRef} className="container max-w-[1100px] mx-auto px-6 py-12 md:py-20 overflow-x-hidden">

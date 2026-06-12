@@ -1,3 +1,4 @@
+import "@/instrumentation-client";
 import { Suspense } from "react";
 import { Cairo, Playfair_Display, Source_Serif_4 } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
