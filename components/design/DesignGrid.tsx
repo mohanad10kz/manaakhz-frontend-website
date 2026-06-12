@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Category, Design } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
 
 interface DesignGridProps {
   designs: Design[];
@@ -14,6 +21,7 @@ interface DesignGridProps {
 export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
   const t = useTranslations("Design");
   const isRtl = locale === "ar";
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [activeSlug, setActiveSlug] = useState<string>("all");
 
@@ -22,10 +30,64 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
       ? designs
       : designs.filter((d) => d.category?.slug === activeSlug);
 
+  useGSAP(() => {
+    // 1. Header Reveal
+    gsap.fromTo(".design-header",
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".design-header",
+          start: "top 85%",
+          toggleActions: "play reverse play reverse"
+        }
+      }
+    );
+
+    // 2. Filter Buttons Reveal
+    gsap.fromTo(".filter-btn",
+      { opacity: 0, scale: 0.95, y: 12 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        stagger: 0.05,
+        duration: 0.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".design-filter-bar",
+          start: "top 85%",
+          toggleActions: "play reverse play reverse"
+        }
+      }
+    );
+
+    // 3. Grid Cards Entrance
+    gsap.fromTo(".design-card",
+      { opacity: 0, y: 35, scale: 0.97 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.08,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".design-grid",
+          start: "top 85%",
+          toggleActions: "play reverse play reverse"
+        }
+      }
+    );
+  }, { scope: containerRef, dependencies: [filteredDesigns] });
+
   return (
-    <div className="container max-w-275 mx-auto px-6 py-12 md:py-20">
+    <div ref={containerRef} className="container max-w-275 mx-auto px-6 py-12 md:py-20 overflow-x-hidden">
       {/* Page Header */}
-      <div className="flex flex-col items-center text-center mb-12">
+      <div className="design-header flex flex-col items-center text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold font-sans text-foreground mb-4">
           {isRtl ? "دوائر من تصميمي" : "My Circuit Designs"}
         </h1>
@@ -39,11 +101,11 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
 
       {/* Filter Bar — shown only if categories exist */}
       {categories.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="design-filter-bar flex flex-wrap justify-center gap-3 mb-12">
           {/* "All" button */}
           <button
             onClick={() => setActiveSlug("all")}
-            className={`px-6 py-2 rounded-full border transition-colors ${
+            className={`filter-btn px-6 py-2 rounded-full border transition-colors ${
               activeSlug === "all"
                 ? "bg-primary text-primary-foreground border-primary"
                 : "bg-transparent text-muted-foreground border-border hover:border-primary hover:text-primary"
@@ -57,7 +119,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
             <button
               key={cat.slug}
               onClick={() => setActiveSlug(cat.slug)}
-              className={`px-6 py-2 rounded-full border transition-colors ${
+              className={`filter-btn px-6 py-2 rounded-full border transition-colors ${
                 activeSlug === cat.slug
                   ? "bg-primary text-primary-foreground border-primary"
                   : "bg-transparent text-muted-foreground border-border hover:border-primary hover:text-primary"
@@ -70,7 +132,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
       )}
 
       {/* Masonry Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="design-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredDesigns.map((design) => {
           const title = isRtl ? design.title_ar : design.title_en;
           const descBlocks = isRtl
@@ -99,7 +161,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
                   sessionStorage.setItem("last_design_page", window.location.pathname);
                 }
               }}
-              className="break-inside-avoid relative overflow-hidden rounded-[8px] border border-border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer block"
+              className="design-card break-inside-avoid relative overflow-hidden rounded-[8px] border border-border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer block"
             >
               <div className="p-6 flex flex-col gap-3">
                 {/* Category badge — only if category exists */}
