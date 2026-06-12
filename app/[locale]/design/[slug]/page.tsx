@@ -6,6 +6,7 @@ import { ChevronRight, Calendar, Tag } from "lucide-react";
 import { DesignGallery } from "@/components/design/DesignGallery";
 import RichTextRenderer from "@/components/shared/RichTextRenderer";
 import SmartBackLink from "@/components/shared/SmartBackLink";
+import { DesignDetailEntrance } from "@/components/design/DesignDetailEntrance";
 
 export async function generateStaticParams() {
   const designs = await getAllDesigns();
@@ -40,10 +41,11 @@ export default async function DesignPostPage({
   const hasMedia = images.length > 0 || videos.length > 0;
 
   return (
-    <div className="grow pt-16 pb-20">
+    <DesignDetailEntrance>
       <div className="max-w-275 mx-auto px-6">
         {/* Breadcrumb */}
         <nav
+          data-anim="breadcrumb"
           aria-label="Breadcrumb"
           className="flex items-center gap-2 text-muted-foreground text-sm mb-8"
         >
@@ -68,14 +70,17 @@ export default async function DesignPostPage({
           {/* Right Column (Text Content) */}
           <div className="lg:col-span-7">
             {/* Post Header */}
-            <header className="mb-12">
+            <header data-anim="header" className="mb-12">
               <h1 className="text-3xl md:text-5xl font-bold font-sans text-foreground mb-6 relative inline-block leading-tight">
                 {title}
                 <span className="absolute -bottom-2 right-0 w-full h-[3px] bg-primary rounded-full opacity-80"></span>
               </h1>
 
               {/* Meta */}
-              <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm mt-6">
+              <div
+                data-anim="meta"
+                className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm mt-6"
+              >
                 <span className="flex items-center gap-1.5">
                   <Calendar className="w-4 h-4" />
                   <span>{design.date}</span>
@@ -93,7 +98,10 @@ export default async function DesignPostPage({
             </header>
 
             {/* Article Body */}
-            <article className="max-w-none text-foreground/90 leading-relaxed font-sans">
+            <article
+              data-anim="body"
+              className="max-w-none text-foreground/90 leading-relaxed font-sans"
+            >
               <RichTextRenderer
                 content={description}
                 dir={isRtl ? "rtl" : "ltr"}
@@ -102,7 +110,10 @@ export default async function DesignPostPage({
             </article>
 
             {/* Bottom Navigation — Hidden on mobile (shown below gallery instead) */}
-            <div className="hidden lg:block mt-16 pt-8 border-t border-border">
+            <div
+              data-anim="nav-bottom"
+              className="hidden lg:block mt-16 pt-8 border-t border-border"
+            >
               <SmartBackLink
                 fallback={`/${locale}/design`}
                 sessionKey="last_design_page"
@@ -120,7 +131,7 @@ export default async function DesignPostPage({
           </div>
 
           {/* Left Column (Gallery) */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28">
+          <div data-anim="gallery" className="lg:col-span-5 lg:sticky lg:top-28">
             {hasMedia ? (
               <DesignGallery
                 images={images}
@@ -139,7 +150,10 @@ export default async function DesignPostPage({
             )}
 
             {/* Bottom Navigation — Visible on mobile only, after gallery */}
-            <div className="lg:hidden mt-10 pt-8 border-t border-border">
+            <div
+              data-anim="nav-bottom"
+              className="lg:hidden mt-10 pt-8 border-t border-border"
+            >
               <SmartBackLink
                 fallback={`/${locale}/design`}
                 sessionKey="last_design_page"
@@ -157,6 +171,6 @@ export default async function DesignPostPage({
           </div>
         </div>
       </div>
-    </div>
+    </DesignDetailEntrance>
   );
 }
