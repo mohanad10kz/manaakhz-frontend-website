@@ -4,7 +4,14 @@ import { About } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Briefcase, ChevronRight, ChevronLeft } from "lucide-react";
 import ExportedImage from "next-image-export-optimizer";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
 
 interface ExperienceTimelineProps {
   about: About;
@@ -85,10 +92,81 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
   const t = useTranslations("About");
   const isRtl = locale === "ar";
   const experience = about.experience || [];
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    // Animate Header
+    gsap.fromTo(".timeline-header",
+      { opacity: 0, x: isRtl ? 35 : -35 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".timeline-header",
+          start: "top 85%",
+          toggleActions: "play reverse play reverse"
+        }
+      }
+    );
+
+    // Animate Timeline Rows
+    const rows = gsap.utils.toArray(".timeline-row");
+    rows.forEach((row: any) => {
+      // Bullet pop in
+      gsap.fromTo(row.querySelector(".timeline-bullet"),
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "back.out(1.6)",
+          scrollTrigger: {
+            trigger: row,
+            start: "top 80%",
+            toggleActions: "play reverse play reverse"
+          }
+        }
+      );
+
+      // Left column Info (Slide from left)
+      gsap.fromTo(row.querySelector(".timeline-info"),
+        { opacity: 0, x: isRtl ? 40 : -40 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: row,
+            start: "top 80%",
+            toggleActions: "play reverse play reverse"
+          }
+        }
+      );
+
+      // Right column Media (Slide from right)
+      gsap.fromTo(row.querySelector(".timeline-media"),
+        { opacity: 0, x: isRtl ? -40 : 40 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: row,
+            start: "top 80%",
+            toggleActions: "play reverse play reverse"
+          }
+        }
+      );
+    });
+  }, { scope: containerRef });
 
   return (
-    <section className="flex flex-col gap-stack-lg">
-      <div className="flex items-center gap-3 mb-4">
+    <section ref={containerRef} className="flex flex-col gap-stack-lg">
+      <div className="timeline-header flex items-center gap-3 mb-4">
         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
           <Briefcase className="w-5 h-5" />
         </div>
@@ -106,14 +184,14 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
           const images = exp.images || [];
 
           return (
-            <div key={index} className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div key={index} className="timeline-row relative grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
               {/* Timeline Bullet */}
               <div 
-                className={`absolute top-1 w-4 h-4 rounded-full bg-card border-2 border-primary shadow-sm ${isRtl ? '-right-[41px]' : '-left-[41px]'}`}
+                className={`timeline-bullet absolute top-1 w-4 h-4 rounded-full bg-card border-2 border-primary shadow-sm ${isRtl ? '-right-[41px]' : '-left-[41px]'}`}
               ></div>
               
               {/* Info */}
-              <div>
+              <div className="timeline-info">
                 <div className="mb-1">
                   <span className="inline-block px-3 py-1 bg-muted text-muted-foreground rounded text-sm font-bold mb-2">
                     {period}
@@ -131,7 +209,9 @@ export function ExperienceTimeline({ about, locale }: ExperienceTimelineProps) {
               </div>
 
               {/* Carousel */}
-              <TimelineCarousel images={images} />
+              <div className="timeline-media w-full">
+                <TimelineCarousel images={images} />
+              </div>
             </div>
           );
         })}

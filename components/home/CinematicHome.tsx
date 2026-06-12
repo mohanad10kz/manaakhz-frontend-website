@@ -538,7 +538,6 @@ export function CinematicHome({ whatsappNumber }: CinematicHomeProps) {
         ref={act2Ref} 
         className="relative min-h-screen py-24 flex items-center bg-background border-t border-border px-6 overflow-hidden"
       >
-        <div className="absolute left-0 top-0 w-96 h-96 bg-[radial-gradient(circle_at_top_left,var(--color-muted),transparent)] opacity-40 pointer-events-none" />
 
         <div className="container max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           

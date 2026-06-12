@@ -25,7 +25,7 @@ export default async function AboutPage({
   }
 
   return (
-    <main className="w-full grow bg-background relative" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <main className="w-full grow bg-background relative overflow-x-hidden" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       {/* Pattern Overlay */}
       <div 
         className="absolute inset-0 opacity-[0.15] pointer-events-none" 
