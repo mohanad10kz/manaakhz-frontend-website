@@ -289,3 +289,21 @@
 .animate-dash-reverse {
   animation: dash-reverse 20s linear infinite;
 }
+
+/* ── Continuous Flowing Traces (Hero Section) ── */
+@keyframes flow-left-right {
+  to {
+    stroke-dashoffset: -320;
+  }
+}
+@keyframes flow-right-left {
+  to {
+    stroke-dashoffset: 320;
+  }
+}
+.flow-trace-fast {
+  animation: flow-left-right 12s linear infinite;
+}
+.flow-trace-fast-reverse {
+  animation: flow-right-left 12s linear infinite;
+}

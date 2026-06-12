@@ -6,7 +6,7 @@ import { Link } from "@/i18n/routing";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm transition-shadow">
+    <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-shadow">
       <div className="container max-w-[1100px] mx-auto flex h-20 items-center justify-between px-6">
         {/* Right side: Logo (in RTL context, first item is Right) */}
         <div className="flex-1 flex justify-start">

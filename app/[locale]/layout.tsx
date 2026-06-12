@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { NavigationProgress } from "@/components/shared/NavigationProgress";
+import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
 import "../globals.css";
 
 const cairo = Cairo({
@@ -70,9 +71,11 @@ export default async function LocaleLayout({
             <NavigationProgress />
           </Suspense>
           <NextIntlClientProvider messages={messages}>
-            <Header />
-            <div className="flex-1 flex flex-col">{children}</div>
-            <Footer />
+            <SmoothScrollProvider>
+              <Header />
+              <div className="flex-1 flex flex-col">{children}</div>
+              <Footer />
+            </SmoothScrollProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
