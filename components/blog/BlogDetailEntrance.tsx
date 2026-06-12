@@ -32,14 +32,6 @@ export function BlogDetailEntrance({ children }: BlogDetailEntranceProps) {
         { opacity: 1, y: 0, duration: 0.55 }
       );
 
-      /* ── Decorative line above title (if any) ────────── */
-      tl.fromTo(
-        "[data-anim='deco-line']",
-        { scaleX: 0, transformOrigin: "right center" },
-        { scaleX: 1, duration: 0.5, ease: "power2.inOut" },
-        "-=0.2"
-      );
-
       /* ── Title ───────────────────────────────────────── */
       tl.fromTo(
         "[data-anim='header']",

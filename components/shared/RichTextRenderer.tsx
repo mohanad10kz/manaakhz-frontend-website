@@ -19,6 +19,28 @@ export default function RichTextRenderer({ content, dir = 'rtl', className = '' 
       <BlocksRenderer
         content={content}
         blocks={{
+          // رابط
+          link: ({ children, url }) => {
+            // روابط البروتوكول الخارجي (tel, mailto, whatsapp...) تُفتح مباشرة في نفس النافذة
+            const isExternalProtocol = /^(tel:|mailto:|whatsapp:|sms:|callto:)/i.test(url);
+            // روابط HTTP الخارجية تُفتح في تبويب جديد
+            const isExternalHttp = /^https?:\/\//i.test(url) && !url.startsWith(typeof window !== 'undefined' ? window.location.origin : '');
+
+            return (
+              <a
+                href={url}
+                target={isExternalHttp ? '_blank' : '_self'}
+                rel={isExternalHttp ? 'noopener noreferrer' : undefined}
+                className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
+                onClick={isExternalProtocol ? (e) => {
+                  // امنع أي interceptors من التدخل
+                  e.stopPropagation();
+                } : undefined}
+              >
+                {children}
+              </a>
+            );
+          },
           // عنوان
           heading: ({ children, level }) => {
             const Tag = (`h${level}`) as React.ElementType
