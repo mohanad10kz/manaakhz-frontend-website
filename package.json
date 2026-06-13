@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/fetch-images.mjs",
-    "build": "next build && next-image-export-optimizer",
+    "build": "next build && next-image-export-optimizer && node scripts/generate-redirects.mjs",
     "start": "npx serve@latest out",
     "lint": "eslint"
   },

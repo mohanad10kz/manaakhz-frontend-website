@@ -14,8 +14,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 //     قبل أن يكتمل الانتقال، مما يعطي استجابة فورية للمستخدم.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const BAR_COLOR = "hsl(var(--primary))";
-const SHADOW_COLOR = "hsl(var(--primary) / 0.4)";
+const BAR_COLOR = "var(--primary)";
+const SHADOW_COLOR = "color-mix(in srgb, var(--primary) 40%, transparent)";
 const HEIGHT_PX = 3;
 const ANIMATION_DURATION_MS = 200;
 
