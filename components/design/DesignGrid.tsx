@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Category, Design } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
@@ -42,6 +42,24 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
     setActiveSlug(slug);
     setCurrentPage(1);
   };
+
+  // Keep track of whether it is the initial mount to avoid scrolling on load
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (containerRef.current) {
+      const topOffset = containerRef.current.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({
+        top: topOffset,
+        behavior: "smooth"
+      });
+    }
+  }, [currentPage, activeSlug]);
 
   useGsapLazy((gsap, ScrollTrigger) => {
     // 1. Header Reveal

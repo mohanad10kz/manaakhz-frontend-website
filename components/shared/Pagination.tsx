@@ -37,13 +37,6 @@ export default function Pagination({
   const getHref = (page: number) =>
     page === 1 ? firstPagePath : `${otherPagePath}/${page}`
 
-  const handlePageClick = (page: number, e: React.MouseEvent) => {
-    if (onPageChange) {
-      e.preventDefault()
-      onPageChange(page)
-    }
-  }
-
   return (
     <nav
       aria-label="pagination"
@@ -51,14 +44,23 @@ export default function Pagination({
     >
       {/* Previous Page */}
       {currentPage > 1 ? (
-        <Link
-          href={onPageChange ? "#" : (getHref(currentPage - 1) as any)}
-          onClick={(e) => handlePageClick(currentPage - 1, e)}
-          prefetch={false}
-          className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
-        >
-          ‹
-        </Link>
+        onPageChange ? (
+          <button
+            type="button"
+            onClick={() => onPageChange(currentPage - 1)}
+            className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm cursor-pointer"
+          >
+            ‹
+          </button>
+        ) : (
+          <Link
+            href={getHref(currentPage - 1) as any}
+            prefetch={false}
+            className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
+          >
+            ‹
+          </Link>
+        )
       ) : (
         <span className="px-3 py-2 rounded-md border border-border text-muted-foreground text-sm cursor-not-allowed opacity-40">
           ‹
@@ -69,11 +71,23 @@ export default function Pagination({
       {pages.map((page, i) =>
         page === '...' ? (
           <span key={`dots-${i}`} className="px-2 text-muted-foreground">…</span>
+        ) : onPageChange ? (
+          <button
+            key={page}
+            type="button"
+            onClick={() => onPageChange(page)}
+            className={`px-3 py-2 rounded-md text-sm transition-colors cursor-pointer ${
+              page === currentPage
+                ? 'bg-primary text-primary-foreground font-bold border border-primary'
+                : 'border border-border text-muted-foreground hover:border-primary hover:text-primary'
+            }`}
+          >
+            {page}
+          </button>
         ) : (
           <Link
             key={page}
-            href={onPageChange ? "#" : (getHref(page) as any)}
-            onClick={(e) => handlePageClick(page, e)}
+            href={getHref(page) as any}
             prefetch={false}
             className={`px-3 py-2 rounded-md text-sm transition-colors ${
               page === currentPage
@@ -88,14 +102,23 @@ export default function Pagination({
 
       {/* Next Page */}
       {currentPage < totalPages ? (
-        <Link
-          href={onPageChange ? "#" : (getHref(currentPage + 1) as any)}
-          onClick={(e) => handlePageClick(currentPage + 1, e)}
-          prefetch={false}
-          className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
-        >
-          ›
-        </Link>
+        onPageChange ? (
+          <button
+            type="button"
+            onClick={() => onPageChange(currentPage + 1)}
+            className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm cursor-pointer"
+          >
+            ›
+          </button>
+        ) : (
+          <Link
+            href={getHref(currentPage + 1) as any}
+            prefetch={false}
+            className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
+          >
+            ›
+          </Link>
+        )
       ) : (
         <span className="px-3 py-2 rounded-md border border-border text-muted-foreground text-sm cursor-not-allowed opacity-40">
           ›

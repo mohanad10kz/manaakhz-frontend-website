@@ -32,6 +32,7 @@ export function NavigationProgress() {
 
   const rafRef = useRef<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const delayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startTimeRef = useRef<number>(0);
   const isNavigatingRef = useRef(false);
 
@@ -44,6 +45,10 @@ export function NavigationProgress() {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
+    if (delayTimerRef.current !== null) {
+      clearTimeout(delayTimerRef.current);
+      delayTimerRef.current = null;
+    }
   }, []);
 
   // ─── بدء الشريط ───────────────────────────────────────────────────────────
@@ -53,35 +58,51 @@ export function NavigationProgress() {
     cancelAll();
 
     setProgress(0);
-    setVisible(true);
-    startTimeRef.current = performance.now();
+    setVisible(false); // ابدأ غير مرئي
 
-    // تحريك الشريط حتى 85% بشكل تدريجي (يتوقف ليُكمله إتمام الانتقال)
-    const animate = (now: number) => {
-      const elapsed = now - startTimeRef.current;
-      // يصل لـ 85% في ~8 ثوانٍ بشكل متباطئ
-      const rawT = Math.min(elapsed / 8000, 1);
-      const t = easeOutCubic(rawT) * 0.85;
-      setProgress(t);
-      if (t < 0.85) {
-        rafRef.current = requestAnimationFrame(animate);
-      }
-    };
-    rafRef.current = requestAnimationFrame(animate);
+    // انتظر 450 مللي ثانية قبل إظهار شريط التحميل (يمنع الوميض في الاتصالات السريعة)
+    delayTimerRef.current = setTimeout(() => {
+      setVisible(true);
+      startTimeRef.current = performance.now();
+
+      // تحريك الشريط حتى 85% بشكل تدريجي (يتوقف ليُكمله إتمام الانتقال)
+      const animate = (now: number) => {
+        const elapsed = now - startTimeRef.current;
+        // يصل لـ 85% في ~8 ثوانٍ بشكل متباطئ
+        const rawT = Math.min(elapsed / 8000, 1);
+        const t = easeOutCubic(rawT) * 0.85;
+        setProgress(t);
+        if (t < 0.85) {
+          rafRef.current = requestAnimationFrame(animate);
+        }
+      };
+      rafRef.current = requestAnimationFrame(animate);
+    }, 450);
   }, [cancelAll]);
 
   // ─── إتمام الشريط ─────────────────────────────────────────────────────────
   const completeProgress = useCallback(() => {
     if (!isNavigatingRef.current) return;
     isNavigatingRef.current = false;
+
+    // ألغِ مؤقت الظهور المؤجل إن اكتمل التحميل قبل مرور الـ 450ms
+    if (delayTimerRef.current !== null) {
+      clearTimeout(delayTimerRef.current);
+      delayTimerRef.current = null;
+    }
+
     cancelAll();
 
-    setProgress(1); // اقفز إلى 100%
-    timerRef.current = setTimeout(() => {
-      setVisible(false);
+    if (visible) {
+      setProgress(1); // اقفز إلى 100%
+      timerRef.current = setTimeout(() => {
+        setVisible(false);
+        setProgress(0);
+      }, ANIMATION_DURATION_MS + 100);
+    } else {
       setProgress(0);
-    }, ANIMATION_DURATION_MS + 100);
-  }, [cancelAll]);
+    }
+  }, [cancelAll, visible]);
 
   // ─── مراقبة تغيّر pathname → إتمام الشريط ────────────────────────────────
   const pathnameRef = useRef(pathname);

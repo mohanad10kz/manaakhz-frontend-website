@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Post } from "@/lib/types";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
@@ -28,6 +28,24 @@ export function PostList({ posts, locale }: PostListProps) {
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE
   );
+
+  // Keep track of whether it is the initial mount to avoid scrolling on load
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (containerRef.current) {
+      const topOffset = containerRef.current.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({
+        top: topOffset,
+        behavior: "smooth"
+      });
+    }
+  }, [currentPage]);
 
   useGsapLazy((gsap, ScrollTrigger) => {
     gsap.fromTo(".blog-header",
