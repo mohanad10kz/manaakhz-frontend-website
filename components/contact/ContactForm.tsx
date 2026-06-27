@@ -3,30 +3,37 @@
 import { useState } from 'react'
 import { z } from 'zod'
 
-// ── Schema (compatible with Zod v4) ─────────────────
-const contactSchema = z.object({
+const getContactSchema = (isRtl: boolean) => z.object({
   name: z
     .string()
-    .min(2, 'الاسم يجب أن يكون حرفين على الأقل')
-    .max(50, 'الاسم طويل جداً'),
+    .min(2, isRtl ? 'الاسم يجب أن يكون حرفين على الأقل' : 'Name must be at least 2 characters')
+    .max(50, isRtl ? 'الاسم طويل جداً' : 'Name is too long'),
   subject: z
     .string()
-    .min(3, 'الموضوع يجب أن يكون 3 أحرف على الأقل')
-    .max(100, 'الموضوع طويل جداً'),
+    .min(3, isRtl ? 'الموضوع يجب أن يكون 3 أحرف على الأقل' : 'Subject must be at least 3 characters')
+    .max(100, isRtl ? 'الموضوع طويل جداً' : 'Subject is too long'),
   message: z
     .string()
-    .min(10, 'الرسالة يجب أن تكون 10 أحرف على الأقل')
-    .max(1000, 'الرسالة طويلة جداً (الحد 1000 حرف)'),
+    .min(10, isRtl ? 'الرسالة يجب أن تكون 10 أحرف على الأقل' : 'Message must be at least 10 characters')
+    .max(1000, isRtl ? 'الرسالة طويلة جداً (الحد 1000 حرف)' : 'Message is too long (max 1000 characters)'),
 })
 
-type ContactFormData = z.infer<typeof contactSchema>
+type ContactFormData = {
+  name: string
+  subject: string
+  message: string
+}
 type FieldKey = keyof ContactFormData
 
 interface Props {
-  whatsappNumber: string  // مثال: '218925337531'
+  whatsappNumber: string
+  locale: string
 }
 
-export default function ContactForm({ whatsappNumber }: Props) {
+export default function ContactForm({ whatsappNumber, locale }: Props) {
+  const isRtl = locale === 'ar'
+  const schema = getContactSchema(isRtl)
+
   const [form, setForm] = useState<ContactFormData>({
     name: '',
     subject: '',
@@ -36,7 +43,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({})
 
   const validateField = (field: FieldKey, value: string) => {
-    const fieldSchema = contactSchema.shape[field]
+    const fieldSchema = schema.shape[field]
     const result = fieldSchema.safeParse(value)
     setErrors((prev) => ({
       ...prev,
@@ -63,7 +70,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
   }
 
   const handleSubmit = () => {
-    const result = contactSchema.safeParse(form)
+    const result = schema.safeParse(form)
     if (!result.success) {
       const fieldErrors: Partial<Record<FieldKey, string>> = {}
       result.error.issues.forEach((issue) => {
@@ -76,7 +83,9 @@ export default function ContactForm({ whatsappNumber }: Props) {
     }
 
     const text = encodeURIComponent(
-      `الاسم: ${form.name}\nالموضوع: ${form.subject}\n\nالرسالة:\n${form.message}`
+      isRtl
+        ? `الاسم: ${form.name}\nالموضوع: ${form.subject}\n\nالرسالة:\n${form.message}`
+        : `Name: ${form.name}\nSubject: ${form.subject}\n\nMessage:\n${form.message}`
     )
     const url = `https://wa.me/${whatsappNumber}?text=${text}`
     window.open(url, '_blank')
@@ -99,7 +108,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
       {/* الاسم */}
       <div>
         <label className="block text-sm font-medium mb-1.5 text-[#1A1A18] dark:text-[#F7F4EF]">
-          الاسم <span className="text-red-500">*</span>
+          {isRtl ? 'الاسم' : 'Name'} <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -107,7 +116,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
           value={form.name}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="أدخل اسمك"
+          placeholder={isRtl ? 'أدخل اسمك' : 'Enter your name'}
           className={`${baseInput} ${errors.name ? errorClass : ''}`}
         />
         {errors.name && touched.name && (
@@ -118,7 +127,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
       {/* الموضوع */}
       <div>
         <label className="block text-sm font-medium mb-1.5 text-[#1A1A18] dark:text-[#F7F4EF]">
-          الموضوع <span className="text-red-500">*</span>
+          {isRtl ? 'الموضوع' : 'Subject'} <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -126,7 +135,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
           value={form.subject}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="موضوع رسالتك"
+          placeholder={isRtl ? 'موضوع رسالتك' : 'Subject of your message'}
           className={`${baseInput} ${errors.subject ? errorClass : ''}`}
         />
         {errors.subject && touched.subject && (
@@ -137,7 +146,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
       {/* الرسالة */}
       <div>
         <label className="block text-sm font-medium mb-1.5 text-[#1A1A18] dark:text-[#F7F4EF]">
-          الرسالة <span className="text-red-500">*</span>
+          {isRtl ? 'الرسالة' : 'Message'} <span className="text-red-500">*</span>
         </label>
         <textarea
           name="message"
@@ -145,7 +154,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
           onChange={handleChange}
           onBlur={handleBlur}
           rows={5}
-          placeholder="اكتب رسالتك هنا..."
+          placeholder={isRtl ? 'اكتب رسالتك هنا...' : 'Write your message here...'}
           className={`${baseInput} resize-none ${errors.message ? errorClass : ''}`}
         />
         <div className="flex justify-between mt-1">
@@ -175,7 +184,7 @@ export default function ContactForm({ whatsappNumber }: Props) {
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
           <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.428a.5.5 0 0 0 .515.572l5.724-1.501A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.523-5.188-1.432l-.372-.22-3.853 1.011 1.03-3.753-.242-.386A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
         </svg>
-        إرسال عبر واتساب
+        {isRtl ? 'إرسال عبر واتساب' : 'Send via WhatsApp'}
       </button>
 
     </div>

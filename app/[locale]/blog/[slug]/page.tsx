@@ -45,17 +45,17 @@ export default async function BlogPostPage({
           className="flex items-center gap-2 text-muted-foreground text-sm mb-8"
         >
           <Link href="/" className="hover:text-primary transition-colors">
-            الرئيسية
+            {isRtl ? "الرئيسية" : "Home"}
           </Link>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4 rtl:rotate-180" />
           <SmartBackLink
             fallback={`/${locale}/blog`}
             sessionKey="last_blog_page"
             className="hover:text-primary transition-colors"
           >
-            أفكاري ومذكراتي
+            {isRtl ? "أفكاري ومذكراتي" : "Thoughts & Notes"}
           </SmartBackLink>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4 rtl:rotate-180" />
           <span aria-current="page" className="text-foreground font-medium">
             {title}
           </span>

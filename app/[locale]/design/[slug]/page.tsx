@@ -50,17 +50,17 @@ export default async function DesignPostPage({
           className="flex items-center gap-2 text-muted-foreground text-sm mb-8"
         >
           <Link href="/" className="hover:text-primary transition-colors">
-            الرئيسية
+            {isRtl ? "الرئيسية" : "Home"}
           </Link>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4 rtl:rotate-180" />
           <SmartBackLink
             fallback={`/${locale}/design`}
             sessionKey="last_design_page"
             className="hover:text-primary transition-colors"
           >
-            تصاميم الدوائر
+            {isRtl ? "تصاميم الدوائر" : "Designs"}
           </SmartBackLink>
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4 rtl:rotate-180" />
           <span aria-current="page" className="text-foreground font-medium">
             {title}
           </span>

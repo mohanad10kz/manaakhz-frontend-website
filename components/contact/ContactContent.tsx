@@ -196,7 +196,7 @@ export function ContactContent({ contactInfo, locale }: ContactContentProps) {
         {/* Right Column - Contact Form (60%) */}
         <div className="contact-right-col md:w-[60%]">
           <div className="bg-white dark:bg-[#1a1a18] rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.07)] dark:shadow-[0_2px_12px_rgba(0,0,0,0.3)] p-6 md:p-8">
-            <ContactForm whatsappNumber={whatsapp_number} />
+            <ContactForm whatsappNumber={whatsapp_number} locale={locale} />
           </div>
         </div>
         
