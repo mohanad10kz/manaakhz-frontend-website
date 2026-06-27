@@ -10,6 +10,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
+import { ScrollRestoration } from "@/components/shared/ScrollRestoration";
 import { getContactInfo } from "@/lib/strapi";
 import "../globals.css";
 
@@ -72,6 +73,9 @@ export default async function LocaleLayout({
         >
           <Suspense fallback={null}>
             <NavigationProgress />
+          </Suspense>
+          <Suspense fallback={null}>
+            <ScrollRestoration />
           </Suspense>
           <NextIntlClientProvider messages={messages}>
             <SmoothScrollProvider>

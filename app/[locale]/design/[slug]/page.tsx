@@ -10,12 +10,22 @@ import { DesignDetailEntrance } from "@/components/design/DesignDetailEntrance";
 
 export async function generateStaticParams() {
   const designs = await getAllDesigns();
+  const locales = ['ar', 'en'];
+  
   if (!designs || designs.length === 0) {
-    return [{ slug: 'empty' }];
+    return locales.map((locale) => ({ locale, slug: 'empty' }));
   }
-  return designs.map((design) => ({
-    slug: design.slug,
-  }));
+
+  const params: { locale: string; slug: string }[] = [];
+  for (const locale of locales) {
+    for (const design of designs) {
+      params.push({
+        locale,
+        slug: design.slug,
+      });
+    }
+  }
+  return params;
 }
 
 export default async function DesignPostPage({

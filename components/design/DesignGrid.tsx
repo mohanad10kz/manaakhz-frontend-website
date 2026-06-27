@@ -22,6 +22,34 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
   const [activeSlug, setActiveSlug] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  // Sync currentPage from URL on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = params.get("page");
+      if (pageParam) {
+        const p = parseInt(pageParam);
+        if (!isNaN(p) && p > 0) {
+          setCurrentPage(p);
+        }
+      }
+    }
+  }, []);
+
+  // Sync back/forward button clicks for page parameters
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = params.get("page");
+      const p = pageParam ? parseInt(pageParam) : 1;
+      setCurrentPage(!isNaN(p) && p > 0 ? p : 1);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
   // Filter designs based on category selection
   const filteredDesigns =
     activeSlug === "all"
@@ -37,10 +65,25 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
     currentPage * DESIGNS_PER_PAGE
   );
 
+  // Page change handler that pushes to history query
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", String(page));
+      window.history.pushState(null, "", url.toString());
+    }
+  };
+
   // Reset pagination page to 1 on category change
   const handleCategoryChange = (slug: string) => {
     setActiveSlug(slug);
     setCurrentPage(1);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", "1");
+      window.history.pushState(null, "", url.toString());
+    }
   };
 
   // Keep track of whether it is the initial mount to avoid scrolling on load
@@ -222,7 +265,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

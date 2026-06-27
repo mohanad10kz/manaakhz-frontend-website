@@ -198,7 +198,7 @@ export async function getAllDesigns(locale?: string): Promise<Design[]> {
 
   return json.data.map((data: any): Design => ({
     id: data.id,
-    slug: data.slug || "",
+    slug: data.slug && data.slug !== "null" ? data.slug : `design-${data.id}`,
     title_ar: data.title_ar || "",
     title_en: data.title_en || "",
     description_ar: data.description_ar || [],
@@ -212,18 +212,32 @@ export async function getAllDesigns(locale?: string): Promise<Design[]> {
 
 export async function getDesignBySlug(slug: string, locale?: string): Promise<Design | null> {
   const decodedSlug = decodeURIComponent(slug);
-  const json = await fetchStrapi("/designs", {
-    "filters[slug][$eq]": decodedSlug,
+  
+  const queryParams: Record<string, string> = {
     "populate[images]": "true",
     "populate[category]": "true",
-  });
+  };
+
+  // If slug starts with 'design-', search by ID instead of slug
+  if (decodedSlug.startsWith("design-")) {
+    const id = parseInt(decodedSlug.replace("design-", ""));
+    if (!isNaN(id)) {
+      queryParams["filters[id][$eq]"] = String(id);
+    } else {
+      queryParams["filters[slug][$eq]"] = decodedSlug;
+    }
+  } else {
+    queryParams["filters[slug][$eq]"] = decodedSlug;
+  }
+
+  const json = await fetchStrapi("/designs", queryParams);
   if (!json?.data || json.data.length === 0) return null;
 
   const data = json.data[0];
 
   return {
     id: data.id,
-    slug: data.slug || "",
+    slug: data.slug && data.slug !== "null" ? data.slug : `design-${data.id}`,
     title_ar: data.title_ar || "",
     title_en: data.title_en || "",
     description_ar: data.description_ar || [],
@@ -336,13 +350,13 @@ export async function getDesignsPaginated(page: number) {
 
   const designs: Design[] = rawDesigns.map((item: any): Design => ({
     id: item.id,
-    slug: item.slug || '',
+    slug: item.slug && item.slug !== "null" ? item.slug : `design-${item.id}`,
     title_ar: item.title_ar || '',
     title_en: item.title_en || '',
     description_ar: item.description_ar || [],
     description_en: item.description_en || [],
     category: item.category
-      ? { id: item.category.id, slug: item.category.slug || '', name_ar: item.category.name_ar || '', name_en: item.category.name_en || '' }
+      ? { id: item.category.id, slug: item.category.slug && item.category.slug !== "null" ? item.category.slug : `design-${item.id}`, name_ar: item.category.name_ar || '', name_en: item.category.name_en || '' }
       : null,
     date: item.date || '',
     images: (Array.isArray(item.images) ? item.images : []).map((img: any) => {

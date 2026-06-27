@@ -20,6 +20,34 @@ export function PostList({ posts, locale }: PostListProps) {
 
   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  // Sync currentPage from URL on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = params.get("page");
+      if (pageParam) {
+        const p = parseInt(pageParam);
+        if (!isNaN(p) && p > 0) {
+          setCurrentPage(p);
+        }
+      }
+    }
+  }, []);
+
+  // Sync back/forward button clicks for page parameters
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = params.get("page");
+      const p = pageParam ? parseInt(pageParam) : 1;
+      setCurrentPage(!isNaN(p) && p > 0 ? p : 1);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
   // Calculate total pages for client-side pagination
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
@@ -28,6 +56,16 @@ export function PostList({ posts, locale }: PostListProps) {
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE
   );
+
+  // Page change handler that pushes to history query
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", String(page));
+      window.history.pushState(null, "", url.toString());
+    }
+  };
 
   // Keep track of whether it is the initial mount to avoid scrolling on load
   const isInitialMount = useRef(true);
@@ -156,7 +194,7 @@ export function PostList({ posts, locale }: PostListProps) {
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

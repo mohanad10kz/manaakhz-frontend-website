@@ -10,12 +10,22 @@ import { BlogDetailEntrance } from "@/components/blog/BlogDetailEntrance";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
+  const locales = ['ar', 'en'];
+  
   if (!posts || posts.length === 0) {
-    return [{ slug: 'empty' }];
+    return locales.map((locale) => ({ locale, slug: 'empty' }));
   }
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+
+  const params: { locale: string; slug: string }[] = [];
+  for (const locale of locales) {
+    for (const post of posts) {
+      params.push({
+        locale,
+        slug: post.slug,
+      });
+    }
+  }
+  return params;
 }
 
 export default async function BlogPostPage({
