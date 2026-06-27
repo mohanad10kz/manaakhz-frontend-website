@@ -39,6 +39,7 @@ function TimelineCarousel({ images }: { images: string[] }) {
           src={images[activeImage]}
           alt="Experience image"
           fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover transition-opacity duration-300"
         />
         
@@ -73,7 +74,7 @@ function TimelineCarousel({ images }: { images: string[] }) {
                   : "border-border opacity-60 hover:opacity-100"
               }`}
             >
-              <ExportedImage src={img} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
+              <ExportedImage src={img} alt={`Thumbnail ${index + 1}`} fill sizes="150px" className="object-cover" />
             </button>
           ))}
         </div>

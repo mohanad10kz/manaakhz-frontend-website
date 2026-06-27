@@ -44,21 +44,28 @@ export function MobileNav() {
       >
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
         <nav className="flex flex-col gap-6 mt-12">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                "text-lg font-medium transition-colors hover:text-primary border-b border-border/50 pb-4",
-                pathname === link.href
-                  ? "text-primary font-bold"
-                  : "text-foreground/80",
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname === link.href || pathname.startsWith(link.href + "/");
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  "text-lg font-medium transition-colors hover:text-primary border-b border-border/50 pb-4",
+                  isActive
+                    ? "text-primary font-bold"
+                    : "text-foreground/80",
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
       </SheetContent>
     </Sheet>
