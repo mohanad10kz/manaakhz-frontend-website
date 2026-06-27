@@ -5,6 +5,8 @@ import { Category, Design } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { useGsapLazy } from "@/hooks/useGsapLazy";
+import Pagination from "@/components/shared/Pagination";
+import { DESIGNS_PER_PAGE } from "@/lib/constants";
 
 interface DesignGridProps {
   designs: Design[];
@@ -18,11 +20,28 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [activeSlug, setActiveSlug] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
+  // Filter designs based on category selection
   const filteredDesigns =
     activeSlug === "all"
       ? designs
       : designs.filter((d) => d.category?.slug === activeSlug);
+
+  // Calculate total pages for client-side pagination
+  const totalPages = Math.ceil(filteredDesigns.length / DESIGNS_PER_PAGE);
+
+  // Slice designs to only display the current page
+  const paginatedDesigns = filteredDesigns.slice(
+    (currentPage - 1) * DESIGNS_PER_PAGE,
+    currentPage * DESIGNS_PER_PAGE
+  );
+
+  // Reset pagination page to 1 on category change
+  const handleCategoryChange = (slug: string) => {
+    setActiveSlug(slug);
+    setCurrentPage(1);
+  };
 
   useGsapLazy((gsap, ScrollTrigger) => {
     // 1. Header Reveal
@@ -76,7 +95,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
         }
       }
     );
-  }, containerRef, [filteredDesigns]);
+  }, containerRef, [paginatedDesigns]);
 
   return (
     <div ref={containerRef} className="container max-w-275 mx-auto px-6 py-12 md:py-20 overflow-x-hidden">
@@ -98,7 +117,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
         <div className="design-filter-bar flex flex-wrap justify-center gap-3 mb-12">
           {/* "All" button */}
           <button
-            onClick={() => setActiveSlug("all")}
+            onClick={() => handleCategoryChange("all")}
             className={`filter-btn px-6 py-2 rounded-full border transition-colors ${
               activeSlug === "all"
                 ? "bg-primary text-primary-foreground border-primary"
@@ -112,7 +131,7 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
           {categories.map((cat) => (
             <button
               key={cat.slug}
-              onClick={() => setActiveSlug(cat.slug)}
+              onClick={() => handleCategoryChange(cat.slug)}
               className={`filter-btn px-6 py-2 rounded-full border transition-colors ${
                 activeSlug === cat.slug
                   ? "bg-primary text-primary-foreground border-primary"
@@ -127,12 +146,12 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
 
       {/* Masonry Grid */}
       <div className="design-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredDesigns.map((design) => {
+        {paginatedDesigns.map((design) => {
           const title = isRtl ? design.title_ar : design.title_en;
           const descBlocks = isRtl
             ? design.description_ar
             : design.description_en;
-          // استخراج نص من أول فقرة في الـ blocks للمقتطف
+          // Extract text from the first paragraph of the blocks for excerpt
           const excerpt = (() => {
             if (!Array.isArray(descBlocks) || descBlocks.length === 0) return '';
             const firstPara = descBlocks.find((b: any) => b.type === 'paragraph');
@@ -180,6 +199,13 @@ export function DesignGrid({ designs, categories, locale }: DesignGridProps) {
           );
         })}
       </div>
+
+      {/* Client-Side Pagination Controls */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

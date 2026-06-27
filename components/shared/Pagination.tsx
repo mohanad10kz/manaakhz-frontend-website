@@ -1,21 +1,25 @@
+"use client";
+
 import { Link } from '@/i18n/routing'
 
 interface Props {
   currentPage: number
   totalPages: number
-  firstPagePath: string    // مثال: '/ar/design'
-  otherPagePath: string    // مثال: '/ar/design-page'
+  firstPagePath?: string    // example: '/ar/design'
+  otherPagePath?: string    // example: '/ar/design-page'
+  onPageChange?: (page: number) => void
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
-  firstPagePath,
-  otherPagePath,
+  firstPagePath = "",
+  otherPagePath = "",
+  onPageChange,
 }: Props) {
   if (totalPages <= 1) return null
 
-  // بناء قائمة أرقام الصفحات مع ... عند الحاجة
+  // Build array of page numbers with ... where appropriate
   const pages: (number | '...')[] = []
 
   if (totalPages <= 7) {
@@ -33,15 +37,23 @@ export default function Pagination({
   const getHref = (page: number) =>
     page === 1 ? firstPagePath : `${otherPagePath}/${page}`
 
+  const handlePageClick = (page: number, e: React.MouseEvent) => {
+    if (onPageChange) {
+      e.preventDefault()
+      onPageChange(page)
+    }
+  }
+
   return (
     <nav
       aria-label="pagination"
       className="flex items-center justify-center gap-2 mt-12 mb-4 flex-wrap"
     >
-      {/* السابق */}
+      {/* Previous Page */}
       {currentPage > 1 ? (
         <Link
-          href={getHref(currentPage - 1) as any}
+          href={onPageChange ? "#" : (getHref(currentPage - 1) as any)}
+          onClick={(e) => handlePageClick(currentPage - 1, e)}
           prefetch={false}
           className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
         >
@@ -53,14 +65,15 @@ export default function Pagination({
         </span>
       )}
 
-      {/* الأرقام */}
+      {/* Pages Numbers */}
       {pages.map((page, i) =>
         page === '...' ? (
           <span key={`dots-${i}`} className="px-2 text-muted-foreground">…</span>
         ) : (
           <Link
             key={page}
-            href={getHref(page) as any}
+            href={onPageChange ? "#" : (getHref(page) as any)}
+            onClick={(e) => handlePageClick(page, e)}
             prefetch={false}
             className={`px-3 py-2 rounded-md text-sm transition-colors ${
               page === currentPage
@@ -73,10 +86,11 @@ export default function Pagination({
         )
       )}
 
-      {/* التالي */}
+      {/* Next Page */}
       {currentPage < totalPages ? (
         <Link
-          href={getHref(currentPage + 1) as any}
+          href={onPageChange ? "#" : (getHref(currentPage + 1) as any)}
+          onClick={(e) => handlePageClick(currentPage + 1, e)}
           prefetch={false}
           className="px-3 py-2 rounded-md border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-sm"
         >

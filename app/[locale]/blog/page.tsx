@@ -1,7 +1,6 @@
 import { PostList } from "@/components/blog/PostList";
-import { getPostsPaginated } from "@/lib/strapi";
+import { getAllPosts } from "@/lib/strapi";
 import { setRequestLocale } from "next-intl/server";
-import Pagination from "@/components/shared/Pagination";
 
 export default async function BlogPage({
   params,
@@ -11,13 +10,15 @@ export default async function BlogPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const { posts, pagination } = await getPostsPaginated(1);
-  const totalPages = pagination.pageCount;
+  // Fetch all posts at build time for client-side pagination (SSG Option A)
+  const posts = await getAllPosts(locale);
 
   if (!posts || posts.length === 0) {
     return (
       <div className="w-full grow flex items-center justify-center py-20">
-        <p className="text-muted-foreground">{locale === 'ar' ? 'لا يوجد محتوى متاح.' : 'No content available.'}</p>
+        <p className="text-muted-foreground">
+          {locale === 'ar' ? 'لا يوجد محتوى متاح.' : 'No content available.'}
+        </p>
       </div>
     );
   }
@@ -25,12 +26,6 @@ export default async function BlogPage({
   return (
     <div className="w-full flex-grow">
       <PostList posts={posts} locale={locale} />
-      <Pagination
-        currentPage={1}
-        totalPages={totalPages}
-        firstPagePath={`/blog`}
-        otherPagePath={`/blog-page`}
-      />
     </div>
   );
 }

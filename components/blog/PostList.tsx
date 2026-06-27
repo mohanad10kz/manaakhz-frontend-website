@@ -1,10 +1,12 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { Post } from "@/lib/types";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
 import { useGsapLazy } from "@/hooks/useGsapLazy";
+import Pagination from "@/components/shared/Pagination";
+import { POSTS_PER_PAGE } from "@/lib/constants";
 
 interface PostListProps {
   posts: Post[];
@@ -15,6 +17,17 @@ export function PostList({ posts, locale }: PostListProps) {
   const t = useTranslations("Blog");
   const isRtl = locale === "ar";
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // Calculate total pages for client-side pagination
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+
+  // Slice posts to display only the current page
+  const paginatedPosts = posts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
 
   useGsapLazy((gsap, ScrollTrigger) => {
     gsap.fromTo(".blog-header",
@@ -39,7 +52,7 @@ export function PostList({ posts, locale }: PostListProps) {
         }
       }
     );
-  }, containerRef);
+  }, containerRef, [paginatedPosts]);
 
   return (
     <div ref={containerRef} className="container max-w-[1100px] mx-auto px-6 py-12 md:py-20 overflow-x-hidden">
@@ -53,11 +66,11 @@ export function PostList({ posts, locale }: PostListProps) {
       </div>
 
       {/* Post List */}
-      <div className="blog-list flex flex-col gap-8">
-        {posts.map((post, index) => {
+      <div className="blog-list flex flex-col gap-8 mb-8">
+        {paginatedPosts.map((post, index) => {
           const title = isRtl ? post.title_ar : post.title_en;
           const contentBlocks = isRtl ? post.content_ar : post.content_en;
-          // استخراج نص من أول فقرة في الـ blocks
+          // Extract text from the first paragraph of the blocks for excerpt
           const excerpt = (() => {
             if (!Array.isArray(contentBlocks) || contentBlocks.length === 0) return '';
             const firstPara = contentBlocks.find((b: any) => b.type === 'paragraph');
@@ -102,20 +115,31 @@ export function PostList({ posts, locale }: PostListProps) {
                         sessionStorage.setItem("last_blog_page", window.location.pathname);
                       }
                     }}
-                    className="focus:outline-none"
                   >
                     {title}
                   </Link>
                 </h2>
-
-                <p className="text-muted-foreground line-clamp-2 leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed line-clamp-3">
                   {excerpt}
                 </p>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="mt-4 text-primary font-bold hover:underline w-fit text-sm"
+                >
+                  {t("read_more")} &rarr;
+                </Link>
               </div>
             </article>
           );
         })}
       </div>
+
+      {/* Client-Side Pagination Controls */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }
