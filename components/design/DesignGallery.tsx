@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { X, Download, ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { createPortal } from "react-dom";
+import ExportedImage from "next-image-export-optimizer";
 
 interface DesignGalleryProps {
   images: string[];
@@ -38,6 +40,11 @@ function toYouTubeEmbed(url: string): string {
 export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const hasImages = images.length > 0;
   const hasVideos = videos.length > 0;
@@ -70,11 +77,13 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
         <div className="gallery-section">
           {/* Main Image */}
           <div className="main-image-wrapper" onClick={() => setDialogOpen(true)}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <ExportedImage
               src={activeImage!}
               alt={title}
-              className="main-image"
+              fill
+              sizes="(max-width: 1024px) 100vw, 42vw"
+              className="main-image object-cover"
+              priority
             />
             {/* Hover overlay */}
             <div className="main-image-overlay">
@@ -114,11 +123,12 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           {images.length > 1 && (
             <div className="thumbnails-row">
               {images.map((img, idx) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <ExportedImage
                   key={idx}
                   src={img}
                   alt={`${title} ${idx + 1}`}
+                  width={80}
+                  height={80}
                   onClick={() => setActiveIndex(idx)}
                   className={`thumbnail ${idx === activeIndex ? "thumbnail-active" : ""}`}
                 />
@@ -157,7 +167,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
       )}
 
       {/* ────────── DIALOG ────────── */}
-      {dialogOpen && activeImage && (
+      {dialogOpen && activeImage && mounted && createPortal(
         <div
           className="dialog-backdrop"
           onClick={() => setDialogOpen(false)}
@@ -204,11 +214,13 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
                   <ChevronLeft className="w-6 h-6" />
                 </button>
               )}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <ExportedImage
                 src={activeImage}
                 alt={title}
-                className="dialog-img"
+                fill
+                sizes="(max-width: 1440px) 95vw, 1440px"
+                className="dialog-img object-contain"
+                priority
               />
               {images.length > 1 && (
                 <button
@@ -225,11 +237,12 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
             {images.length > 1 && (
               <div className="dialog-thumbnails">
                 {images.map((img, idx) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <ExportedImage
                     key={idx}
                     src={img}
                     alt={`${idx + 1}`}
+                    width={64}
+                    height={64}
                     onClick={() => setActiveIndex(idx)}
                     className={`dialog-thumb ${idx === activeIndex ? "dialog-thumb-active" : ""}`}
                   />
@@ -237,7 +250,8 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ────────── STYLES ────────── */}
@@ -253,13 +267,10 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           border: 1px solid var(--border);
           margin-bottom: 0.75rem;
           background: var(--card);
+          aspect-ratio: 4/3;
         }
 
         .main-image {
-          width: 100%;
-          aspect-ratio: 4/3;
-          object-fit: cover;
-          display: block;
           transition: transform 0.35s ease;
         }
         .main-image-wrapper:hover .main-image {
@@ -274,6 +285,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           align-items: center;
           justify-content: center;
           transition: background 0.25s ease;
+          z-index: 10;
         }
         .main-image-wrapper:hover .main-image-overlay {
           background: rgba(0,0,0,0.25);
@@ -303,7 +315,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          z-index: 2;
+          z-index: 20;
           opacity: 0;
           transition: opacity 0.2s ease, background 0.2s ease;
           box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -410,11 +422,12 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .dialog-content {
-          background: #1a1a18;
+          background: #10100e;
           border-radius: 1rem;
-          width: 100%;
-          max-width: 56rem;
-          max-height: 95vh;
+          width: 95vw;
+          max-width: 90rem;
+          height: 90vh;
+          max-height: 90vh;
           display: flex;
           flex-direction: column;
           overflow: hidden;
@@ -429,6 +442,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           justify-content: space-between;
           padding: 0.75rem 1rem;
           border-bottom: 1px solid rgba(255,255,255,0.08);
+          flex-shrink: 0;
         }
 
         .dialog-counter {
@@ -472,14 +486,12 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           overflow: hidden;
           min-height: 0;
           padding: 0.75rem;
+          width: 100%;
         }
 
         .dialog-img {
-          max-width: 100%;
-          max-height: calc(95vh - 10rem);
-          object-fit: contain;
           border-radius: 0.5rem;
-          display: block;
+          object-fit: contain;
         }
 
         .dialog-nav {
@@ -510,6 +522,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           overflow-x: auto;
           border-top: 1px solid rgba(255,255,255,0.08);
           scrollbar-width: none;
+          flex-shrink: 0;
         }
         .dialog-thumbnails::-webkit-scrollbar { display: none; }
 
