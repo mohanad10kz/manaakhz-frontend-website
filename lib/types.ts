@@ -91,7 +91,7 @@ export interface Phone {
 }
 
 export interface ContactSocialLink {
-  platform: 'whatsapp' | 'facebook' | 'youtube'
+  platform: string
   url: string
   label: string
 }

@@ -10,6 +10,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
+import { getContactInfo } from "@/lib/strapi";
 import "../globals.css";
 
 const cairo = Cairo({
@@ -51,6 +52,7 @@ export default async function LocaleLayout({
 
   // Providing all messages to the client side is the easiest way to get started
   const messages = await getMessages();
+  const contactInfo = await getContactInfo(locale);
 
   const isArabic = locale === "ar";
   const fontVariables = isArabic
@@ -75,7 +77,7 @@ export default async function LocaleLayout({
             <SmoothScrollProvider>
               <Header />
               <div className="flex-1 flex flex-col">{children}</div>
-              <Footer />
+              <Footer contactInfo={contactInfo} />
             </SmoothScrollProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
