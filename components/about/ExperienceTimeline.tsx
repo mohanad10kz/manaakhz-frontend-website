@@ -3,7 +3,7 @@
 import { About } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Briefcase, ChevronRight, ChevronLeft } from "lucide-react";
-import ExportedImage from "next-image-export-optimizer";
+import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { useState, useRef } from "react";
 import { useGsapLazy } from "@/hooks/useGsapLazy";
 
@@ -35,7 +35,7 @@ function TimelineCarousel({ images }: { images: string[] }) {
     <div className="w-full flex flex-col gap-2">
       {/* Main Image */}
       <div className="relative w-full h-48 lg:h-64 rounded-lg overflow-hidden border border-border shadow-sm sepia-[.3] hover:sepia-0 transition-all duration-500 group">
-        <ExportedImage
+        <OptimizedImage
           src={images[activeImage]}
           alt="Experience image"
           fill
@@ -74,7 +74,7 @@ function TimelineCarousel({ images }: { images: string[] }) {
                   : "border-border opacity-60 hover:opacity-100"
               }`}
             >
-              <ExportedImage src={img} alt={`Thumbnail ${index + 1}`} fill sizes="150px" className="object-cover" />
+              <OptimizedImage src={img} alt={`Thumbnail ${index + 1}`} fill sizes="150px" className="object-cover" />
             </button>
           ))}
         </div>

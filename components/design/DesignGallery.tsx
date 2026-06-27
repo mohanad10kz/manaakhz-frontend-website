@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { X, Download, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { createPortal } from "react-dom";
-import ExportedImage from "next-image-export-optimizer";
+import { OptimizedImage } from "@/components/shared/OptimizedImage";
 
 interface DesignGalleryProps {
   images: string[];
@@ -77,7 +77,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
         <div className="gallery-section">
           {/* Main Image */}
           <div className="main-image-wrapper" onClick={() => setDialogOpen(true)}>
-            <ExportedImage
+            <OptimizedImage
               src={activeImage!}
               alt={title}
               fill
@@ -123,7 +123,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
           {images.length > 1 && (
             <div className="thumbnails-row">
               {images.map((img, idx) => (
-                <ExportedImage
+                <OptimizedImage
                   key={idx}
                   src={img}
                   alt={`${title} ${idx + 1}`}
@@ -214,7 +214,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
                   <ChevronLeft className="w-6 h-6" />
                 </button>
               )}
-              <ExportedImage
+              <OptimizedImage
                 src={activeImage}
                 alt={title}
                 fill
@@ -237,7 +237,7 @@ export function DesignGallery({ images, videos, title, isRtl }: DesignGalleryPro
             {images.length > 1 && (
               <div className="dialog-thumbnails">
                 {images.map((img, idx) => (
-                  <ExportedImage
+                  <OptimizedImage
                     key={idx}
                     src={img}
                     alt={`${idx + 1}`}

@@ -3,7 +3,7 @@
 import { About } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Cake, Users, GraduationCap, Award, MapPin } from "lucide-react";
-import ExportedImage from "next-image-export-optimizer";
+import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { useRef } from "react";
 import { useGsapLazy } from "@/hooks/useGsapLazy";
 
@@ -111,7 +111,7 @@ export function HeroBento({ about, locale }: HeroBentoProps) {
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
         <div className="bento-photo w-48 h-48 rounded-full border-4 border-primary p-1 bg-card overflow-hidden mb-6 relative z-10 shadow-lg">
-          <ExportedImage
+          <OptimizedImage
             src={about.photo}
             alt={name}
             width={192}
